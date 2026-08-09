@@ -32,6 +32,8 @@ Without a dedicated workflow, an agent can scaffold a second frontend, introduce
 - Accountless local Agent Mode and isolated cloud-agent guidance
 - Expiring Cloud Agent Mode deployments for temporary shared previews
 - A backend-readiness gate before Sites or the browser starts
+- A Node.js 22.13+ runtime gate, Node 24 project pins, and project-owned `dev`, `build`, and `start` checks
+- Expected-port enforcement, exact localhost HTTP verification, and process-lifetime guidance
 - Production deployment ordering and Chrome QA
 - A removable, light/dark-aware “Built with Codex Sites + Convex” footer using bundled artwork and a Phosphor GitHub icon
 - Deterministic preflight and project verification scripts
@@ -163,6 +165,14 @@ For most users, the simplest option is to let Codex run the commands. Ask: `Run 
 
 To run commands yourself, select the terminal icon in the upper-right corner of the Codex app or press `Ctrl` plus the backtick key. The integrated terminal opens for the current project or worktree. Commands such as `npx convex dev` and the Sites development server remain running; keep each in its own terminal session, or ask Codex to manage both processes. See the [integrated terminal guide](https://learn.chatgpt.com/docs/integrated-terminal) and [ChatGPT/Codex docs](https://learn.chatgpt.com/docs).
 
+Before `npm install`, `npx`, or a project script, verify the Node executable selected by that terminal:
+
+```bash
+~/.codex/skills/codex-sites-convex/scripts/check-runtime.sh .
+```
+
+For a project-local installation, use `./.agents/skills/codex-sites-convex/scripts/check-runtime.sh .`. The Sites starter requires Node.js 22.13.0 or newer; Node.js 24 LTS is recommended. `npm install` installs project dependencies but cannot install or switch the terminal's Node.js runtime. See [local runtime and server](references/local-runtime-and-server.md).
+
 Optional manual mode:
 
 ```text
@@ -251,6 +261,12 @@ Use this prompt when creating and publishing a Codex Site for the first time.
 $codex-sites-convex Build, validate, and publish this app as a durable shared
 Codex Site backed by Convex production.
 
+Before package installation or any project Node command, check the selected
+Node executable. Require Node.js 22.13.0 or newer and use Node.js 24 LTS for a
+new project. Stop before npm or npx if the shell still selects Node 20. Preserve
+the existing package manager, dependencies, scripts, lockfile, and unrelated
+changes.
+
 Build and validate locally first. Verify a Convex query, mutation, and realtime
 update. Register the Codex Site once or reuse its project_id, then inspect
 get_site access, latest version, current_live_url, Sites environment-variable
@@ -289,14 +305,27 @@ platform blocker occurs. Do not add product authentication unless I request it.
 $codex-sites-convex Set up this app for accountless local development with
 Codex Sites and Convex. If this folder is not already a Codex Sites project,
 initialize Sites in this same folder and preserve its normal project structure.
-Run npm install and npx convex dev --once to provision an anonymous local
-backend. Confirm .env.local has NEXT_PUBLIC_CONVEX_URL and that the generated
-Convex API exists before starting the frontend. Keep one Convex watcher and one
-Sites development server running, then verify a query, mutation, and realtime
-update locally. Give me the localhost URL. Do not require a Convex login, create
-a second frontend or database, publish the Site, or claim the local backend can
-power a .chatgpt.site URL. Accountless mode does not create hosted Sites
-environment variables.
+
+Before npm install, npx, or another project Node command, run the skill's
+runtime gate. Require Node.js 22.13.0 or newer and recommend Node.js 24 LTS.
+For a new project, create .nvmrc and .node-version containing 24, set
+package.json engines.node to >=22.13.0, add scripts/check-node-version.mjs, and
+wire it through predev, prebuild, and prestart. Explain that npm install cannot
+install or switch the Node runtime selected by the terminal. Preserve existing
+scripts, dependencies, package manager, lockfile, and unrelated changes.
+
+Use the established package manager to install dependencies, then run the
+matching Convex dev --once command to provision an accountless local backend.
+Confirm .env.local has NEXT_PUBLIC_CONVEX_URL and that the generated Convex API
+exists before starting the frontend. Resolve the intended Sites port, start one
+Convex watcher and exactly one Sites development server, reject any fallback
+port, and verify the exact printed localhost URL with an HTTP request. Verify a
+query, mutation, and realtime update locally. Keep both processes running and
+give me the verified localhost URL. Explain that it works only while the Sites
+server remains running. Do not require a Convex login, create a second frontend
+or database, publish the Site, or claim the local backend can power a
+.chatgpt.site URL. Accountless mode does not create hosted Sites environment
+variables.
 ```
 
 ### Temporary preview
@@ -304,6 +333,10 @@ environment variables.
 ```text
 $codex-sites-convex Publish this app as a temporary shared preview using Convex
 Cloud Agent Mode and Codex Sites.
+
+Run the skill's Node runtime gate before package installation or project Node
+commands. Require Node.js 22.13.0 or newer, recommend Node.js 24 LTS, and stop
+before npm or npx when the terminal selects an older runtime.
 
 Confirm the intended Convex team and project. Reuse an existing isolated cloud
 development deployment only after verifying its scope and expiration, or create
@@ -341,6 +374,10 @@ For a new Codex or Convex user:
 ```text
 $codex-sites-convex Build, validate, and publish the latest version to Codex
 Sites.
+
+Run the skill's Node runtime gate before package installation or project Node
+commands. Preserve this project's Node pins, package manager, scripts,
+dependencies, lockfile, intended dev port, and unrelated changes.
 
 Treat this as an update to the existing Site. Read project_id from
 .openai/hosting.json, call get_site, and preserve its current access policy and
@@ -384,17 +421,18 @@ The footer follows the Site's resolved theme. It uses the color Convex wordmark 
 
 ## How the workflow works
 
-1. **Inspect** — Classify the workspace and report local, registered, saved-version, and published states separately.
-2. **Prepare Sites** — Keep the existing `.openai/hosting.json`, package manager, and vinext/Vite structure, but treat the manifest as local metadata until a valid `project_id` is confirmed.
-3. **Provision Convex** — Use the confirmed production deployment by default for publish/share requests, accountless local development only for local-only work, or an isolated expiring cloud dev deployment only for a temporary preview.
-4. **Check capabilities** — Refresh the official component catalog and `llms.txt`, then check `convex-helpers` only when a common code-level utility matches the request.
-5. **Load implementation instructions** — Read the complete official Component `SKILL.md` when one is selected, or current helper documentation before adding a named utility.
-6. **Gate startup** — Require `.env.local`, `NEXT_PUBLIC_CONVEX_URL`, and generated APIs before starting exactly one Sites server.
-7. **Prove connectivity** — Test a minimal query, mutation, and realtime update from the published Sites origin.
-8. **Build** — Implement the requested product with generated APIs, real Convex-backed data, and the removable built-with footer.
-9. **Validate** — Run Convex generation, official Convex ESLint rules when configured, backend checks, frontend build, type checks, and structural verification.
-10. **Register early** — When publication was requested, create the Site exactly once after the local build passes, confirm the hosted record, and check sidebar visibility separately before Convex production setup.
-11. **Save and publish** — Deploy Convex production with fresh target-specific consent, set Sites public configuration only after the production URL is known, rebuild and scan the bundle, push the exact validated source commit, save and deploy that commit, require `get_site.current_live_url`, and complete live QA.
+1. **Gate the runtime** — Check the selected Node executable before npm, npx, or project scripts. Require Node 22.13.0 or newer and use Node 24 LTS for new projects.
+2. **Inspect** — Classify the workspace and report local, registered, saved-version, and published states separately while preserving unrelated work.
+3. **Prepare Sites** — Keep the existing `.openai/hosting.json`, package manager, and vinext/Vite structure. For new projects, add Node pins, project-owned pre-command checks, and strict expected-port handling without starting Sites yet.
+4. **Provision Convex** — Use the confirmed production deployment by default for publish/share requests, accountless local development only for local-only work, or an isolated expiring cloud dev deployment only for a temporary preview.
+5. **Check capabilities** — Refresh the official component catalog and `llms.txt`, then check `convex-helpers` only when a common code-level utility matches the request.
+6. **Load implementation instructions** — Read the complete official Component `SKILL.md` when one is selected, or current helper documentation before adding a named utility.
+7. **Gate startup** — Require `.env.local`, `NEXT_PUBLIC_CONVEX_URL`, and generated APIs before starting one Sites server on the expected port.
+8. **Prove connectivity** — Verify the exact localhost URL over HTTP, then test a minimal query, mutation, and realtime update.
+9. **Build** — Implement the requested product with generated APIs, real Convex-backed data, and the removable built-with footer.
+10. **Validate** — Recheck the runtime, run Convex generation, official Convex ESLint rules when configured, backend checks, frontend build, type checks, and structural verification.
+11. **Register early** — When publication was requested, create the Site exactly once after the local build passes, confirm the hosted record, and check sidebar visibility separately before Convex production setup.
+12. **Save and publish** — Deploy Convex production with fresh target-specific consent, set Sites public configuration only after the production URL is known, rebuild and scan the bundle, push the exact validated source commit, save and deploy that commit, require `get_site.current_live_url`, and complete live QA.
 
 Production lifecycle: local Sites project → registered Site → Convex production backend → production Convex URL → Sites production build → saved Sites version → Sites deployment → live URL and access verification. A temporary preview replaces the production backend and URL steps with an isolated expiring cloud dev deployment and its public URL.
 
@@ -417,6 +455,7 @@ If work stops, the handoff names the last completed state and the next required 
 Use a development backend while building:
 
 ```bash
+~/.codex/skills/codex-sites-convex/scripts/check-runtime.sh .
 npm install
 npx convex dev --once
 ```
@@ -510,19 +549,53 @@ See the official [Convex Agent Mode documentation](https://docs.convex.dev/cli/a
 
 ## Reliable local startup
 
-Provision Convex before starting the Sites development server:
+Use this order. Do not move `npm install` ahead of the runtime gate, and do not start Sites before Convex is ready.
+
+1. From the project root, check the selected runtime:
+
+```bash
+~/.codex/skills/codex-sites-convex/scripts/check-runtime.sh .
+```
+
+2. If the project is new, initialize the Sites files without starting the server. Create `.nvmrc` and `.node-version` with `24`, require `>=22.13.0` in `package.json`, copy the project-owned Node check, wire it through `predev`, `prebuild`, and `prestart`, and set Vite `server.strictPort: true`.
+3. Install dependencies with the established package manager. For a new npm project:
 
 ```bash
 npm install
+```
+
+`npm install` installs project packages. It cannot install Node.js or switch a shell that still selects Node 20.
+
+4. Provision Convex once and pass backend readiness:
+
+```bash
 npx convex dev --once
 ./scripts/check-backend-ready.sh .
 ```
 
-After the readiness check passes:
+5. Start `npx convex dev` in one retained terminal and keep it running.
+6. Resolve the expected Sites port from the existing dev script or Vite configuration. The stock Vinext starter expects `3000`. Inspect only that port:
 
-1. Start `npx convex dev` and keep it running.
-2. Start exactly one Sites development server on its intended port.
-3. Open the browser only after both processes are healthy.
+```bash
+lsof -nP -iTCP:3000 -sTCP:LISTEN
+```
+
+Reuse a healthy server only when it belongs to the same project. Stop only duplicates started by the current task. Never stop an unrelated process when ownership is unclear.
+7. Start the project's existing development command once in a second retained terminal:
+
+```bash
+npm run dev
+```
+
+Never accept a fallback port. If the server reports one, stop that task-owned process, resolve the expected-port conflict, and restart once.
+8. Capture the exact Local URL printed by the server. Allow up to 60 seconds for the first worker compilation, then verify that exact URL and port:
+
+```bash
+~/.codex/skills/codex-sites-convex/scripts/check-local-url.sh \
+  http://localhost:3000/ 3000
+```
+
+Use the URL and port actually printed by the project instead of copying the example blindly. Open the browser only after the HTTP check passes.
 
 The readiness check requires:
 
@@ -533,6 +606,23 @@ The readiness check requires:
 If Sites started before Convex wrote `.env.local`, stop Sites and restart it exactly once. The running client bundle will not reliably receive an environment variable created after startup.
 
 Do not force a Convex login for local agent development and do not use legacy anonymous-mode flags. In a non-interactive shell, `npx convex dev --once` automatically provisions the supported accountless local backend.
+
+For a local-only handoff, keep the one Convex watcher and one Sites server running. `localhost` works only on that computer and only while `npm run dev` remains alive. Closing its terminal ends the local Site.
+
+### Fix Homebrew Node 20
+
+If `which -a node` or the runtime gate shows an older Homebrew `node@20` path, install and select Node 24:
+
+```bash
+brew install node@24
+export PATH="$(brew --prefix node@24)/bin:$PATH"
+```
+
+Replace the old path in the active shell startup file only with the user's approval. For nvm, use `nvm install 24 && nvm use 24 && nvm alias default 24`. Verify the fix in a fresh login shell:
+
+```bash
+/bin/zsh -lic 'command -v node; node --version; command -v npm; npm --version'
+```
 
 ## Official component discovery
 
@@ -571,6 +661,14 @@ See [helpers and ESLint guidance](references/helpers-and-eslint.md).
 
 ## Helper scripts
 
+### Runtime gate
+
+```bash
+./scripts/check-runtime.sh /path/to/project
+```
+
+Runs before npm, npx, or project scripts. It reports the selected Node executable and version, requires Node 22.13.0 or newer, recommends Node 24 LTS, detects common stale Node 20 shell paths, and exits before invoking npm when Node is unsupported.
+
 ### Preflight
 
 ```bash
@@ -606,6 +704,14 @@ Checks the required Sites and Convex structure, generated API, dependency bounda
 
 Confirms `NEXT_PUBLIC_CONVEX_URL` and generated API types exist before the Sites server or browser starts.
 
+### Local URL gate
+
+```bash
+./scripts/check-local-url.sh http://localhost:3000/ 3000
+```
+
+Requires the exact printed localhost URL to use the resolved expected port, then sends an HTTP GET. A fallback port fails before the HTTP request.
+
 ### Publication-state recovery
 
 ```bash
@@ -628,6 +734,9 @@ Requires the exact production Convex URL and rejects localhost, the development 
 
 | Symptom | Likely cause | Correct response |
 | --- | --- | --- |
+| `npm run dev` fails under Node 20 | The terminal selected an unsupported runtime before npm started | Stop retrying `npm install`, switch the existing runtime manager to Node 24, and verify the selection in a fresh login shell |
+| `node --version` is new but `which node` points at `node@20` in another terminal | A shell startup file or stale login session is overriding `PATH` | Replace the old explicit path with Node 24, open a fresh login shell, and rerun `check-runtime.sh` |
+| Browser cannot reach localhost after a successful build | The development-server process exited | Restart the one Sites dev process and keep its terminal running; a build alone does not serve localhost |
 | Missing Convex URL or setup screen | Sites started before `.env.local` existed | Provision Convex, pass the readiness check, then restart Sites once |
 | JSON parsing, worker startup, or repeated Vite restart errors | Environment, dependencies, and hosting configuration changed while Vite was restarting | Let file changes settle, stop duplicate servers, and perform one clean restart |
 | Sites moves to a fallback port | Another Sites server is still running | Reuse the healthy intended server or stop the duplicate started by the current task |
@@ -652,6 +761,7 @@ codex-sites-convex/
 ├── agents/
 │   └── openai.yaml
 ├── assets/
+│   ├── check-node-version.mjs
 │   ├── codex-color.svg
 │   ├── convex-color.svg
 │   └── convex-white.svg
@@ -665,19 +775,28 @@ codex-sites-convex/
 │   ├── convex-doc-map.md
 │   ├── convex-rules.md
 │   ├── deployment-and-qa.md
+│   ├── helpers-and-eslint.md
+│   ├── local-runtime-and-server.md
 │   └── sites-settings-and-environment.md
 ├── prds/
-│   └── 2026-08-07-default-durable-publication.md
+│   ├── 2026-08-07-default-durable-publication.md
+│   ├── 2026-08-09-convex-helpers-eslint.md
+│   └── 2026-08-09-runtime-localhost-hardening.md
 ├── scripts/
-    ├── check-backend-ready.sh
-    ├── check-components.sh
-    ├── check-production-bundle.sh
-    ├── check-publication-state.sh
-    ├── preflight.sh
-    └── verify-project.sh
+│   ├── check-backend-ready.sh
+│   ├── check-components.sh
+│   ├── check-local-url.sh
+│   ├── check-production-bundle.sh
+│   ├── check-publication-state.sh
+│   ├── check-runtime.sh
+│   ├── preflight.sh
+│   └── verify-project.sh
 └── tests/
     ├── fixtures/
     │   └── registered-public-unpublished.json
+    ├── test-local-url.sh
+    ├── test-node-runtime.sh
+    ├── test-node-version.mjs
     └── test-publication-state.sh
 ```
 
@@ -685,7 +804,8 @@ codex-sites-convex/
 
 - Codex desktop app or Codex CLI with skill support
 - A ChatGPT workspace with Codex Sites enabled
-- Node.js, npm, and `npx`
+- Node.js 22.13.0 or newer; Node.js 24 LTS is recommended
+- The existing project package manager; new Sites starters use npm and `npx`
 - No Convex account for accountless local agent development
 - A Convex account for isolated cloud deployments and production publishing
 - Chrome for final published-site verification
@@ -762,6 +882,11 @@ The skill requires Codex to:
 - [Codex MCP customization](https://developers.openai.com/codex/concepts/customization#mcp)
 - [Codex plugins](https://developers.openai.com/codex/plugins)
 - [Codex configuration reference](https://developers.openai.com/codex/config-reference)
+
+## Node.js runtime resources
+
+- [Node.js release status](https://nodejs.org/en/about/previous-releases)
+- [Homebrew `node@24`](https://formulae.brew.sh/formula/node@24)
 
 ## Official Convex resources
 
@@ -847,6 +972,11 @@ Issues and pull requests are welcome. Keep changes focused on the Codex Sites fr
 ```bash
 python3 /path/to/skill-creator/scripts/quick_validate.py .
 bash -n scripts/*.sh
+./tests/test-node-runtime.sh
+node --test tests/test-node-version.mjs
+./tests/test-local-url.sh
+./tests/test-publication-state.sh
+git diff --check
 ```
 
 When changing component discovery, also run:

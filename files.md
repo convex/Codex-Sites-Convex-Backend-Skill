@@ -4,9 +4,11 @@
 - `README.md` — installation, default publication prompt, alternative workflows, and user-facing guidance.
 - `agents/openai.yaml` — skill-picker metadata and default prompt.
 - `assets/` — Codex and Convex footer artwork for light and dark themes.
+- `assets/check-node-version.mjs` — reusable Node.js minimum-version guard copied into new projects.
 - `references/architecture.md` — runtime ownership and Sites lifecycle contract.
 - `references/accounts-access-and-ownership.md` — developer accounts, visitor access, shared-data warnings, and consent.
 - `references/agent-mode.md` — accountless local, cloud-agent preview, and production routing.
+- `references/local-runtime-and-server.md` — Node selection, project pins, expected-port startup, localhost health, and process lifetime.
 - `references/bootstrap.md` — project initialization and official Convex agent setup.
 - `references/built-with-footer.md` — removable light/dark-aware attribution footer.
 - `references/components.md` — official Convex component discovery and static-hosting exclusion.
@@ -16,14 +18,20 @@
 - `references/deployment-and-qa.md` — detailed local, preview, production, publishing, access, and live-QA runbook.
 - `references/sites-settings-and-environment.md` — Sites management, hosting metadata, and environment boundaries.
 - `scripts/preflight.sh` — conservative local project and agent-setup classification.
+- `scripts/check-runtime.sh` — runtime-first Node executable/version gate and stale-shell diagnostics.
+- `scripts/check-local-url.sh` — exact localhost URL, expected-port, and HTTP health gate.
 - `scripts/check-backend-ready.sh` — local Convex URL and generated-API readiness gate.
 - `scripts/check-components.sh` — current official Convex component discovery helper.
 - `scripts/check-production-bundle.sh` — production URL presence and local/dev/credential-marker rejection.
 - `scripts/check-publication-state.sh` — normalized Sites-state classifier and recovery instructions.
-- `scripts/verify-project.sh` — structural validation and publication registration requirement.
+- `scripts/verify-project.sh` — runtime-gated structural validation and publication registration requirement.
 - `tests/fixtures/registered-public-unpublished.json` — regression state for a public but never-deployed Site.
 - `tests/test-publication-state.sh` — recovery-classification regression test.
+- `tests/test-node-runtime.sh` — regression coverage for Node boundaries, failure before npm, and existing pnpm preservation.
+- `tests/test-node-version.mjs` — unit coverage for the reusable project-owned version check.
+- `tests/test-local-url.sh` — regression coverage for exact expected-port HTTP checks and fallback rejection.
 - `prds/2026-08-07-default-durable-publication.md` — implementation requirements for the durable-publication default.
 - `prds/2026-08-09-convex-helpers-eslint.md` — requirements for helper selection and Convex ESLint validation.
+- `prds/2026-08-09-runtime-localhost-hardening.md` — runtime-first and local-server reliability requirements.
 - `changelog.md` — release-facing change history.
 - `task.md` — completed maintenance tasks with UTC timestamps.

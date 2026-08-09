@@ -2,23 +2,19 @@
 set -u
 
 project_dir="${1:-.}"
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 if [[ ! -d "$project_dir" ]]; then
   echo "ERROR: project directory does not exist: $project_dir"
   exit 2
 fi
 
-cd "$project_dir" || exit 2
+if ! "$script_dir/check-runtime.sh" "$project_dir"; then
+  echo "PREFLIGHT FAILED: fix the Node.js runtime before package installation, Convex provisioning, or Sites startup."
+  exit 1
+fi
 
-missing=0
-for command_name in node npm npx; do
-  if command -v "$command_name" >/dev/null 2>&1; then
-    echo "OK: $command_name"
-  else
-    echo "MISSING: $command_name"
-    missing=1
-  fi
-done
+cd "$project_dir" || exit 2
 
 if [[ ! -f .openai/hosting.json ]]; then
   echo "LOCAL SITES PROJECT: NOT FOUND: .openai/hosting.json"
@@ -93,4 +89,4 @@ else
   echo "PACKAGE MANAGER: not established"
 fi
 
-exit "$missing"
+exit 0

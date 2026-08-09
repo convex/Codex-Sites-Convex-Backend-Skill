@@ -10,12 +10,14 @@ Read [accounts-access-and-ownership.md](accounts-access-and-ownership.md) before
 
 | Mode | Setup | Account/key |
 | --- | --- | --- |
-| Local agent development | `npm install` then `npx convex dev --once` | No login or deploy key required |
+| Local agent development | Runtime gate, then `npm install` and `npx convex dev --once` | No login or deploy key required |
 | Interactive local preview | Keep `npx convex dev` running beside Sites | Uses the selected local or developer deployment |
 | Cloud-agent development | Create an isolated cloud dev deployment and mint a deployment-scoped key | Scoped key required; never share a broad personal credential |
 | Temporary shared preview | Publish Sites against an isolated, expiring cloud dev deployment | Scoped key for developers; visitors need no Convex account |
 | Production publishing | Deploy to a Convex cloud project, then rebuild Sites with its production URL | Convex project/account required |
 | Site visitors | Browser connects through the public Convex URL | No Convex account; product auth is separate |
+
+Before every local or cloud-agent command sequence, run `scripts/check-runtime.sh` from the project root. Node.js 22.13.0 is the minimum and Node.js 24 LTS is recommended. `npm install` cannot switch the Node executable selected by the shell. Preserve an existing non-npm package manager and use its equivalent Convex commands.
 
 ## Accountless local development
 
@@ -24,6 +26,7 @@ In a non-interactive shell, when no deployment is configured and `CONVEX_DEPLOY_
 Use:
 
 ```bash
+~/.codex/skills/codex-sites-convex/scripts/check-runtime.sh .
 npm install
 npx convex dev --once
 ```
@@ -76,9 +79,12 @@ Do not call this production, use a production key, or imply that preview data au
 3. Verify `.env.local` contains `NEXT_PUBLIC_CONVEX_URL`.
 4. Verify generated API types exist.
 5. Start exactly one Sites server.
-6. Keep `npx convex dev` running for an interactive preview.
+6. Prove the exact printed Sites URL and expected port with `scripts/check-local-url.sh`.
+7. Keep both `npx convex dev` and the Sites server running for an interactive preview.
 
 If Sites started before step 3, restart it exactly once after the environment file is ready.
+
+Localhost remains available only while its development-server process is alive. A successful build does not keep port 3000 open. Follow [local-runtime-and-server.md](local-runtime-and-server.md) for runtime selection, strict port handling, HTTP verification, and local-only handoff.
 
 For a durable publish/share request, local Agent Mode is only the validation stage. Continue by confirming the Convex Cloud production target, obtaining fresh target-specific deployment consent, running `npx convex deploy`, capturing the exact production URL, setting Sites `NEXT_PUBLIC_CONVEX_URL` as non-secret public configuration, rebuilding, and completing the Sites save/deploy/live-QA workflow. Never place `CONVEX_DEPLOY_KEY`, an admin key, or a backend secret in Sites public environment or browser code.
 

@@ -6,6 +6,10 @@ All notable changes to this project are documented here. This file follows [Keep
 
 ### Added
 
+- A runtime gate that requires Node.js 22.13.0 or newer before npm, npx, Convex, or Sites project commands and recommends Node.js 24 LTS.
+- Node 24 project pins, a reusable project-owned version check, and `predev`, `prebuild`, and `prestart` requirements for new Sites projects.
+- Regression coverage proving Node 24 and 22.13 pass, Node 20 and 22.12 fail before npm runs, pnpm remains selected, and fallback localhost ports fail before HTTP verification.
+- A localhost runbook covering expected-port ownership, strict-port behavior, first compilation, exact URL checks, and process lifetime.
 - Optional `convex-helpers` selection guidance for matched code-level utilities.
 - Official Convex ESLint setup, validation, and project-verification guidance.
 - A production-bundle guard that rejects localhost, development deployment URLs, and Convex credential markers.
@@ -14,6 +18,9 @@ All notable changes to this project are documented here. This file follows [Keep
 
 ### Changed
 
+- Made runtime validation the first setup and project-verification step without changing the existing Convex-before-Sites startup order.
+- Required local-only handoff to keep one Sites server and one Convex watcher running when the execution surface supports it.
+- Preserved existing package managers, scripts, dependencies, lockfiles, deliberate ports, and unrelated changes while adding runtime hardening.
 - Extended capability discovery from built-in primitives and Components to optional helper utilities without making them default dependencies.
 - Made new projects use the official Convex ESLint recommended rules while preserving existing project lint configuration.
 - Moved Quick Start ahead of the optional live demo and clarified that the demo is not the default architecture.
@@ -30,5 +37,8 @@ All notable changes to this project are documented here. This file follows [Keep
 
 ### Fixed
 
+- Prevented stale Node 20 shells from completing npm work and failing later during Vinext/Vite startup.
+- Clarified that `npm install` cannot switch Node.js and that localhost disappears when its development server exits.
+- Prevented fallback ports from being handed off as the intended local Site.
 - Prevented registered or public Sites from being described as published without a matching nonempty `get_site.current_live_url`.
 - Fixed the README architecture diagram's duplicate node identifier.

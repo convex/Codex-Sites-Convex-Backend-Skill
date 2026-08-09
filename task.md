@@ -5,3 +5,4 @@
 - 2026-08-07T17:28:15Z — Added beginner-safe Codex task and integrated-terminal guidance while preserving the established Convex and Sites workflow order.
 - 2026-08-07T17:36:36Z — Moved README Quick Start before the optional Daymark Todo demo and marked the demo as non-default architecture.
 - 2026-08-09T05:38:05Z — Added optional `convex-helpers` capability routing, official Convex ESLint quality gates, configured/partial/absent lint detection, README resources, and validated the updated skill for deployment.
+- 2026-08-09T07:17:39Z — Added the runtime-first Node 22.13 gate, Node 24 new-project pins and pre-command guards, stale Homebrew path recovery, strict expected-port localhost verification, retained local processes, and Node/port regression coverage.

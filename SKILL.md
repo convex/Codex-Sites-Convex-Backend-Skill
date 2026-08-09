@@ -28,6 +28,7 @@ Do not stop a publication workflow after local validation, cloud linking, Site r
 ## Load only the references needed
 
 - Always read [references/architecture.md](references/architecture.md).
+- Before dependency installation, Sites/Vinext startup, or localhost troubleshooting, read [references/local-runtime-and-server.md](references/local-runtime-and-server.md).
 - Before selecting a Convex environment or explaining accounts, access, ownership, or authentication, read [references/accounts-access-and-ownership.md](references/accounts-access-and-ownership.md).
 - Before publishing or changing a published Site, hosted environment variable, connected Convex deployment, or sharing setting, read [references/sites-settings-and-environment.md](references/sites-settings-and-environment.md).
 - Before configuring the Convex plugin, MCP, skills, or managed AI files, read the current official [Convex agent setup guide](https://www.convex.dev/agent-setup.md) and [references/bootstrap.md](references/bootstrap.md).
@@ -45,7 +46,7 @@ If the installed `sites:sites-building`, `sites:sites-hosting`, `convex:convex-e
 
 ### 1. Inspect before changing anything
 
-Run `scripts/preflight.sh` from the target project root. Inspect `AGENTS.md`, `.openai/hosting.json`, `package.json`, the lockfile, `app/`, `convex/`, and `.env.example` when present. Preserve the existing package manager and working structure.
+Run `scripts/check-runtime.sh` from the target project root before `npm install`, `npx`, a project script, or another Node-based project command. Its initial `node --version` probe must be the first executable runtime check. Require Node.js 22.13.0 or newer and recommend Node.js 24 LTS. If it fails, stop before npm or npx, explain that `npm install` cannot install or switch Node, and follow [references/local-runtime-and-server.md](references/local-runtime-and-server.md). After repairing the existing runtime selection within authorization, verify `command -v node`, `node --version`, `command -v npm`, and `npm --version` in a fresh login shell. Then run `scripts/preflight.sh` and inspect `AGENTS.md`, `.openai/hosting.json`, `package.json`, the lockfile, `app/`, `convex/`, and `.env.example` when present. Preserve the existing package manager, dependencies, scripts, lockfile, working structure, and unrelated uncommitted changes.
 
 Report these Sites states separately; never use one as proof of another:
 
@@ -69,9 +70,9 @@ Confirm an existing Convex project only when the same project root has both a `c
 
 ### 2. Prepare or preserve the Sites frontend
 
-For a new project, use the installed Sites building workflow to initialize the local project files, but do not start or open the Sites server yet. This cross-product ordering overrides the usual Sites-only preview order: provision Convex and pass the backend-readiness gate first. Treat `.openai/hosting.json` as a local hosting manifest, not proof of registration; only a valid nonempty `project_id` identifies a registered Site. Do not replace the project's vinext/Vite/Cloudflare Worker structure.
+For a new project, use the installed Sites building workflow to initialize the local project files, but do not start or open the Sites server yet. This cross-product ordering overrides the usual Sites-only preview order: provision Convex and pass the backend-readiness gate first. Create `.nvmrc` and `.node-version` with `24`, set `package.json#engines.node` to `>=22.13.0`, copy `assets/check-node-version.mjs` to the app as `scripts/check-node-version.mjs`, and add `predev`, `prebuild`, and `prestart` scripts that run the check. Merge with existing scripts and preserve any stricter compatible starter requirement. Set or merge Vite `server.strictPort: true` so the new project fails on an occupied expected port. Treat `.openai/hosting.json` as a local hosting manifest, not proof of registration; only a valid nonempty `project_id` identifies a registered Site. Do not replace the project's vinext/Vite/Cloudflare Worker structure.
 
-For an existing project, install dependencies only when absent. Inspect the actual starter before choosing its public environment-variable convention.
+For an existing project, install dependencies only when absent. Preserve compatible runtime pins, pre-scripts, its package manager, and its deliberate port configuration. Do not create a second lockfile or replace existing pre-scripts when adding a runtime check. Inspect the actual starter before choosing its public environment-variable convention.
 
 ### 3. Add Convex to the same project
 
@@ -82,6 +83,8 @@ npm install convex
 npx convex dev
 npx convex ai-files status
 ```
+
+These commands show the new npm-project path. For an existing pnpm, Yarn, or Bun project, use that package manager's install and executable commands; never create `package-lock.json` beside another lockfile.
 
 For a confirmed Convex project, run `npx convex ai-files install` only when status reports missing or stale files. Let the CLI manage `AGENTS.md`, `CLAUDE.md`, `convex.json`, generated guidance, and project skills; never reproduce or edit managed sections by hand. Read `convex/_generated/ai/guidelines.md` completely before editing `convex/` when it exists.
 
@@ -141,16 +144,19 @@ Verify the selected integration with plugin listing, AI-file status, and MCP hea
 
 ### 6. Start exactly one Sites server
 
-Start Sites only after the backend-readiness gate passes. Before starting it, inspect retained sessions and the intended port:
+Start Sites only after the backend-readiness gate passes. Resolve the expected port from the existing dev command or configuration; the stock Vinext starter expects `3000`. Inspect retained sessions and only that intended port:
 
 - Reuse a healthy Sites server for this project when one already exists.
 - Stop duplicate Sites servers started by this task before continuing.
 - Never accept a fallback port as success; it usually means another server is still running.
 - Never stop an unrelated user process. If ownership is unclear, report the port conflict and ask.
+- Start the existing project dev command once in a retained session. If it announces a fallback port, stop only that task-owned process, resolve the expected-port conflict, and restart once on the expected port.
 
 If Sites was started before Convex wrote `.env.local`, stop it and restart it exactly once after `NEXT_PUBLIC_CONVEX_URL` exists. Environment variables are captured when the client bundle starts; a running server will not reliably pick up a newly created public URL.
 
 When `.env.local`, dependencies, and hosting configuration change together, allow those changes to settle and perform one clean restart. Treat JSON parse errors, overlapping Vite restarts, fallback ports, multiple-renderer warnings, and worker errors appearing in that window as one cascading server-state failure until the clean restart proves otherwise.
+
+Capture the exact Local URL printed by the healthy server. Allow up to 60 seconds for the first worker compilation, then run `scripts/check-local-url.sh EXACT_LOCAL_URL EXPECTED_PORT`. Do not substitute a guessed URL or accept a successful response from another port. For local-only work, keep one healthy Sites server and one interactive Convex server running through handoff unless the user asks to stop them. If the execution surface cannot preserve long-running processes, state that limitation and give the exact command the user must keep running. Explain that localhost works only on that computer and only while the development server remains alive. Never describe localhost as published or shareable.
 
 ### 7. Prove the deployed connection early
 
@@ -192,6 +198,8 @@ npm run build
 ```
 
 Run lint and a separate type check when defined. Use `scripts/verify-project.sh` for local structural checks, or `scripts/verify-project.sh --publish` when publication was requested. Review changed Convex functions for validators, authentication, public/internal visibility, indexes, pagination, bounded reads, and mutation conflicts.
+
+Run `scripts/check-runtime.sh` again before final Node-based checks. For local preview work, verify the exact expected URL returns HTTP success while the server remains running. When the shell runtime changed, perform the final runtime verification in a new login shell so the fix survives the next terminal session.
 
 For a new project, configure the official `@convex-dev/eslint-plugin` recommended rules and ensure lint checks the actual Convex directory. For an existing project, preserve its ESLint format and extend a compatible configuration; do not replace unrelated rules or silently migrate configuration formats. If the existing project has no ESLint setup, recommend the plugin and report lint as not configured rather than failing solely for its absence. Follow [references/helpers-and-eslint.md](references/helpers-and-eslint.md) and the current official ESLint documentation.
 
@@ -257,12 +265,14 @@ Do not enable production MCP writes, generate a sign-in bypass token, make a Sit
 Finish only when:
 
 - the requested workflow uses Convex-backed data end to end;
+- the selected Node.js executable is 22.13.0 or newer, new projects pin Node 24 and guard `dev`, `build`, and `start`, and any runtime repair survives a fresh login shell;
 - the selected agent mode matches the environment and account requirements;
 - backend readiness passed before the Sites server or browser started;
 - the official component catalog and current Convex documentation were checked before capability implementation;
 - any `convex-helpers` utility was selected for a named need rather than installed speculatively;
 - the official Convex ESLint rules pass when configured, or the handoff clearly reports that an existing project has no lint setup;
 - backend generation/checks and the frontend build pass;
+- local-only handoff proves the exact expected localhost URL responds, rejects fallback ports, and leaves the required Sites and Convex development processes running, or states why the execution surface cannot preserve them;
 - no browser bundle contains a secret;
 - the removable built-with footer is present unless the user explicitly opted out;
 - the footer remains legible in the Site's explicit light and dark modes;

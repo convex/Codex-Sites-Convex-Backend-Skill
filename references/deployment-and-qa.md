@@ -19,6 +19,7 @@ Apply the hosted management, environment-layer, and update rules in [sites-setti
 ## Before deployment
 
 - Confirm no unrelated user changes will be overwritten.
+- Run `scripts/check-runtime.sh` before package installation, npx, or project scripts. Require Node.js 22.13.0 or newer and recommend Node.js 24 LTS.
 - Run Convex code generation and backend validation.
 - Run the frontend production build, lint, and type check when defined.
 - Confirm the browser uses only a public Convex deployment URL.
@@ -65,14 +66,22 @@ Do not stop at an intermediate state unless authorization or the platform blocks
 $codex-sites-convex Set up this app for accountless local development with
 Codex Sites and Convex. If this folder is not already a Codex Sites project,
 initialize Sites in this same folder and preserve its normal project structure.
-Run npm install and npx convex dev --once to provision an anonymous local
-backend. Confirm .env.local has NEXT_PUBLIC_CONVEX_URL and that the generated
-Convex API exists before starting the frontend. Keep one Convex watcher and one
-Sites development server running, then verify a query, mutation, and realtime
-update locally. Give me the localhost URL. Do not require a Convex login, create
-a second frontend or database, publish the Site, or claim the local backend can
-power a .chatgpt.site URL. Accountless mode does not create hosted Sites
-environment variables.
+Run the skill's runtime gate before npm, npx, or project scripts. Require Node
+22.13.0 or newer and recommend Node 24 LTS. For a new project, add the Node 24
+pins and project-owned pre-command checks. Explain that npm install cannot
+install or switch the terminal's Node runtime. Preserve existing scripts,
+dependencies, package manager, lockfile, and unrelated changes.
+
+Install with the established package manager and run the matching Convex dev
+--once command. Confirm .env.local has NEXT_PUBLIC_CONVEX_URL and that the
+generated Convex API exists before starting the frontend. Keep one Convex
+watcher and one Sites development server running. Reject a fallback port and
+verify the exact printed localhost URL with an HTTP request. Then verify a
+query, mutation, and realtime update locally. Give me the verified localhost
+URL and explain it works only while the development server remains running. Do
+not require a Convex login, create a second frontend or database, publish the
+Site, or claim the local backend can power a .chatgpt.site URL. Accountless mode
+does not create hosted Sites environment variables.
 ```
 
 ### Temporary preview with Cloud Agent Mode
@@ -149,11 +158,13 @@ Registration is intentionally early so the Site has a stable hosted identity eve
 
 Use this while building and testing. It is not the backend for the published Site.
 
-1. Install dependencies.
-2. Run `npx convex dev --once` to configure a development backend, push functions once, generate API types, and write the development deployment URL to `.env.local`.
-3. Verify the frontend's public Convex URL variable is present. For this Sites starter it is normally `NEXT_PUBLIC_CONVEX_URL`; follow the actual starter convention if different.
-4. During an interactive preview, keep `npx convex dev` running beside exactly one Sites development server.
-5. Verify development reads, writes, and realtime updates.
+1. Run `scripts/check-runtime.sh` before package installation or project Node commands. Stop before npm or npx when Node is unsupported.
+2. Install dependencies with the established package manager.
+3. Run `npx convex dev --once`, or the package-manager equivalent, to configure a development backend, push functions once, generate API types, and write the development deployment URL to `.env.local`.
+4. Verify the frontend's public Convex URL variable is present. For this Sites starter it is normally `NEXT_PUBLIC_CONVEX_URL`; follow the actual starter convention if different.
+5. During an interactive preview, keep the Convex watcher running beside exactly one Sites development server on the expected port.
+6. Run `scripts/check-local-url.sh EXACT_LOCAL_URL EXPECTED_PORT`, then verify development reads, writes, and realtime updates.
+7. Keep both processes alive for local-only handoff and explain that localhost ends when the Sites process stops.
 
 Accountless agent development may use a local backend without a Convex account. A cloud development deployment requires a Convex project and suitably scoped credentials.
 
@@ -300,6 +311,7 @@ Use Chrome for the final deployed check. Verify:
 ## Development-server recovery
 
 - Run only one Sites server for the project and require the intended port.
+- Reject fallback ports and verify the exact printed local URL with `scripts/check-local-url.sh` before opening the browser or handing it off.
 - If `.env.local`, dependencies, or hosting configuration change after startup, let the writes settle and restart exactly once.
 - Treat JSON parsing, worker startup, multiple-renderer, and fallback-port errors immediately after those changes as cascading restart failures first.
 - Keep `npx convex dev` running during an interactive local preview.

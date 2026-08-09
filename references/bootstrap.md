@@ -6,24 +6,30 @@ Open the app folder in Codex and start a task there. Paste the skill prompt into
 
 Codex guide: https://learn.chatgpt.com/docs/integrated-terminal
 
+Before either bootstrap path, read [local-runtime-and-server.md](local-runtime-and-server.md) and run `scripts/check-runtime.sh` from the target project root. Do not run `npm install`, `npx`, or a project script until Node.js 22.13.0 or newer is selected. Node.js 24 LTS is recommended. Repeating `npm install` cannot repair an older Node executable selected by the shell.
+
 ## New empty workspace
 
-1. Initialize the Sites starter with the installed Sites workflow.
-2. Do not start the Sites server yet.
-3. Install `convex` in the same package.
-4. Have Codex run `npx convex dev --once` in its terminal to provision an accountless local backend.
-5. Run `npx convex ai-files status`, then install only when the managed files are missing or stale.
-6. Verify `.env.local` contains a nonempty `NEXT_PUBLIC_CONVEX_URL` and generated API types exist.
-7. Add a guarded `ConvexProvider` that renders a helpful setup state instead of throwing when the URL is absent.
-8. Start exactly one Sites server after backend readiness passes.
-9. Keep `npx convex dev` running alongside Sites for the interactive preview.
-10. Build the vertical connection test before product features.
+1. Run the runtime gate and initialize the Sites starter with the installed Sites workflow.
+2. Pin Node 24 in `.nvmrc` and `.node-version`, require `>=22.13.0` in `package.json`, copy the project-owned Node check, and wire it through `predev`, `prebuild`, and `prestart` without replacing existing scripts.
+3. Set or merge Vite `server.strictPort: true`, but preserve an existing project's deliberate port configuration.
+4. Do not start the Sites server yet.
+5. Install `convex` in the same package using the established package manager.
+6. Have Codex run the matching `convex dev --once` command in its terminal to provision an accountless local backend.
+7. Run the matching `convex ai-files status` command, then install only when the managed files are missing or stale.
+8. Verify `.env.local` contains a nonempty `NEXT_PUBLIC_CONVEX_URL` and generated API types exist.
+9. Add a guarded `ConvexProvider` that renders a helpful setup state instead of throwing when the URL is absent.
+10. Start exactly one Sites server after backend readiness passes, then prove its exact printed URL and expected port with `scripts/check-local-url.sh`.
+11. Keep the Convex watcher and Sites server running for the interactive preview.
+12. Build the vertical connection test before product features.
 
 If Sites was already running when Convex created or changed `.env.local`, stop it and restart exactly once. Do not accept a fallback port.
 
+For local-only handoff, do not stop a healthy server merely because validation finished. Localhost disappears when that process exits. If Codex cannot preserve the process, tell the user exactly which command must remain running.
+
 ## Existing Sites project
 
-Preserve `.openai/hosting.json`, the package manager, lockfile, Vite/vinext structure, worker entrypoint, and existing scripts. Add only the Convex dependency, `convex/`, generated client types, provider, and requested product code.
+Preserve `.openai/hosting.json`, the package manager, lockfile, Vite/vinext structure, worker entrypoint, dependencies, existing scripts, and unrelated changes. Run the runtime gate before installing anything. Preserve compatible existing runtime pins and prepend the project-owned runtime guard to existing pre-scripts instead of replacing them. Add only the Convex dependency, `convex/`, generated client types, provider, requested runtime hardening, and product code.
 
 Do not treat the manifest alone as a registered Site. A valid nonempty `project_id` means the local folder has registration metadata; confirm that registration with `get_site`. When publication is requested, register the Site exactly once after the local build passes and before Convex production setup can pause the workflow.
 

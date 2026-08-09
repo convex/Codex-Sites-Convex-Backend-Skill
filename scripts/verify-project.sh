@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -u
 
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 project_dir="."
 publishing_requested=0
 failures=0
@@ -28,6 +29,11 @@ for argument in "$@"; do
       ;;
   esac
 done
+
+if ! "$script_dir/check-runtime.sh" "$project_dir"; then
+  echo "FAILED: fix the Node.js runtime before project verification."
+  exit 1
+fi
 
 check_file() {
   if [[ -e "$1" ]]; then
