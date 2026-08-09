@@ -10,7 +10,8 @@ Before implementing a backend capability:
 4. Compare the official component with the built-in approach.
 5. When selecting a component, fetch the catalog's linked `SKILL.md` and read it completely before installing or editing code.
 6. Follow that component skill for package installation, registration, schema, API usage, environment variables, and validation.
-7. Run the relevant build and Convex checks after installation.
+7. If no Component is selected and a common code-level utility may fit, follow [helpers-and-eslint.md](helpers-and-eslint.md) before adding `convex-helpers`.
+8. Run the relevant build and Convex checks after installation.
 
 Do not copy a catalog version into implementation instructions. Use the package/version shown by the live catalog at execution time.
 

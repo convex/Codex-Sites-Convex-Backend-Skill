@@ -34,6 +34,7 @@ Do not stop a publication workflow after local validation, cloud linking, Site r
 - Before provisioning any development backend, read [references/agent-mode.md](references/agent-mode.md).
 - Before editing `convex/`, read [references/convex-rules.md](references/convex-rules.md).
 - Before selecting backend packages or implementing a capability, read [references/components.md](references/components.md).
+- Before adding `convex-helpers` or changing ESLint configuration, read [references/helpers-and-eslint.md](references/helpers-and-eslint.md).
 - Before completing the frontend, read [references/built-with-footer.md](references/built-with-footer.md).
 - Before publishing, read [references/deployment-and-qa.md](references/deployment-and-qa.md).
 - For authentication, file storage, scheduled jobs, search, migrations, or external APIs, use the official links routed by [references/convex-doc-map.md](references/convex-doc-map.md).
@@ -115,7 +116,8 @@ Before implementing any product capability:
 4. If an official component clearly fits, fetch and read that component's linked `SKILL.md` completely before writing code.
 5. Inspect the current project for an already-installed solution before adding a package.
 6. Use the component only when it materially reduces custom infrastructure; otherwise use the documented built-in Convex primitive.
-7. Record the selected component or the reason no component was selected in the task update.
+7. If no Component is selected and the capability needs a common code-level utility, check the current `convex-helpers` repository and package documentation. Install it only for a named matched utility; it is not a Component or default dependency.
+8. Record the selected Component or helper, or the reason neither was selected, in the task update.
 
 Never select or install a Convex static-hosting component. Codex Sites owns the frontend build, published URL, and sharing.
 
@@ -191,6 +193,8 @@ npm run build
 
 Run lint and a separate type check when defined. Use `scripts/verify-project.sh` for local structural checks, or `scripts/verify-project.sh --publish` when publication was requested. Review changed Convex functions for validators, authentication, public/internal visibility, indexes, pagination, bounded reads, and mutation conflicts.
 
+For a new project, configure the official `@convex-dev/eslint-plugin` recommended rules and ensure lint checks the actual Convex directory. For an existing project, preserve its ESLint format and extend a compatible configuration; do not replace unrelated rules or silently migrate configuration formats. If the existing project has no ESLint setup, recommend the plugin and report lint as not configured rather than failing solely for its absence. Follow [references/helpers-and-eslint.md](references/helpers-and-eslint.md) and the current official ESLint documentation.
+
 Fix failures and rerun the failing check. Do not declare completion from a local UI preview alone.
 
 ### 10. Register the Site early when publication is requested
@@ -256,6 +260,8 @@ Finish only when:
 - the selected agent mode matches the environment and account requirements;
 - backend readiness passed before the Sites server or browser started;
 - the official component catalog and current Convex documentation were checked before capability implementation;
+- any `convex-helpers` utility was selected for a named need rather than installed speculatively;
+- the official Convex ESLint rules pass when configured, or the handoff clearly reports that an existing project has no lint setup;
 - backend generation/checks and the frontend build pass;
 - no browser bundle contains a secret;
 - the removable built-with footer is present unless the user explicitly opted out;

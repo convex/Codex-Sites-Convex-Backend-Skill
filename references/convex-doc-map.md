@@ -32,5 +32,7 @@ Before implementing a capability, also refresh the official component catalog at
 | Components overview | https://docs.convex.dev/components/overview |
 | Using components | https://docs.convex.dev/components/using |
 | Official component catalog | https://www.convex.dev/components/get-convex.md |
+| Convex helper utilities | https://github.com/get-convex/convex-helpers |
+| Convex ESLint rules | https://docs.convex.dev/eslint |
 
-Read only the pages needed for the requested feature. Prefer current project-installed Convex rules when they are newer than this bundled map.
+Read only the pages needed for the requested feature. Follow [helpers-and-eslint.md](helpers-and-eslint.md) for utility selection and lint setup. Prefer current project-installed Convex rules when they are newer than this bundled map.

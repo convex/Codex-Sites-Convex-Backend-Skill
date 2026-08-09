@@ -25,6 +25,8 @@ Without a dedicated workflow, an agent can scaffold a second frontend, introduce
 - Official [Convex agent setup](https://www.convex.dev/agent-setup.md) checks for plugin, MCP, and managed AI files
 - Official Convex component discovery before implementation
 - Component-specific skill loading when a component is selected
+- Optional [`convex-helpers`](https://github.com/get-convex/convex-helpers) discovery for matched code-level utilities
+- Official [Convex ESLint rules](https://docs.convex.dev/eslint) for backend quality checks
 - Convex schema, validator, index, authorization, and pagination rules
 - A deployed HTTPS and WebSocket connectivity gate
 - Accountless local Agent Mode and isolated cloud-agent guidance
@@ -385,12 +387,12 @@ The footer follows the Site's resolved theme. It uses the color Convex wordmark 
 1. **Inspect** — Classify the workspace and report local, registered, saved-version, and published states separately.
 2. **Prepare Sites** — Keep the existing `.openai/hosting.json`, package manager, and vinext/Vite structure, but treat the manifest as local metadata until a valid `project_id` is confirmed.
 3. **Provision Convex** — Use the confirmed production deployment by default for publish/share requests, accountless local development only for local-only work, or an isolated expiring cloud dev deployment only for a temporary preview.
-4. **Check capabilities** — Refresh the official component catalog and `llms.txt` before implementation.
-5. **Load component instructions** — Read the complete official component `SKILL.md` when one is selected.
+4. **Check capabilities** — Refresh the official component catalog and `llms.txt`, then check `convex-helpers` only when a common code-level utility matches the request.
+5. **Load implementation instructions** — Read the complete official Component `SKILL.md` when one is selected, or current helper documentation before adding a named utility.
 6. **Gate startup** — Require `.env.local`, `NEXT_PUBLIC_CONVEX_URL`, and generated APIs before starting exactly one Sites server.
 7. **Prove connectivity** — Test a minimal query, mutation, and realtime update from the published Sites origin.
 8. **Build** — Implement the requested product with generated APIs, real Convex-backed data, and the removable built-with footer.
-9. **Validate** — Run Convex generation, backend checks, frontend build, lint, type checks, and structural verification.
+9. **Validate** — Run Convex generation, official Convex ESLint rules when configured, backend checks, frontend build, type checks, and structural verification.
 10. **Register early** — When publication was requested, create the Site exactly once after the local build passes, confirm the hosted record, and check sidebar visibility separately before Convex production setup.
 11. **Save and publish** — Deploy Convex production with fresh target-specific consent, set Sites public configuration only after the production URL is known, rebuild and scan the bundle, push the exact validated source commit, save and deploy that commit, require `get_site.current_live_url`, and complete live QA.
 
@@ -550,6 +552,23 @@ Run component discovery manually:
 ./scripts/check-components.sh "resend"
 ```
 
+## Backend utilities and Convex ESLint
+
+The skill treats [`convex-helpers`](https://github.com/get-convex/convex-helpers) as an optional utility library, not a default dependency or Convex Component. It checks helpers only when a named utility removes repeated code or a known correctness risk. Good candidates include custom function wrappers, relationships, validators, sessions, pagination, query helpers, and CORS.
+
+The selection order is:
+
+1. Preserve an existing project solution.
+2. Use a built-in Convex primitive when it is sufficient.
+3. Use an official Component when it should own state or a lifecycle.
+4. Use a matched `convex-helpers` utility for code-level reuse.
+
+Sessions do not provide authentication, custom wrappers do not replace resource authorization, and JavaScript filters do not replace indexed queries. The skill never installs `convex-helpers` speculatively.
+
+For code quality, new projects use the official [`@convex-dev/eslint-plugin`](https://docs.convex.dev/eslint) recommended rules. Existing ESLint configurations are extended without replacing unrelated rules or silently migrating formats. An existing project with no ESLint setup receives a clear recommendation instead of failing solely because lint is absent.
+
+See [helpers and ESLint guidance](references/helpers-and-eslint.md).
+
 ## Helper scripts
 
 ### Preflight
@@ -577,7 +596,7 @@ Refreshes the official Convex catalog and returns relevant backend candidates.
 ./scripts/verify-project.sh /path/to/project --publish
 ```
 
-Checks the required Sites and Convex structure, generated API, dependency boundary, and obvious credential risks. With `--publish`, it also requires a valid nonempty `project_id` in `.openai/hosting.json`.
+Checks the required Sites and Convex structure, generated API, dependency boundary, obvious credential risks, and whether the official Convex ESLint plugin is configured, partial, or absent. With `--publish`, it also requires a valid nonempty `project_id` in `.openai/hosting.json`.
 
 ### Backend readiness
 
@@ -764,6 +783,12 @@ The skill requires Codex to:
 - [Understanding Components](https://docs.convex.dev/components/understanding)
 - [Using Components](https://docs.convex.dev/components/using)
 - [Authoring Components](https://docs.convex.dev/components/authoring)
+
+### Utilities and code quality
+
+- [`convex-helpers`](https://github.com/get-convex/convex-helpers)
+- [`convex-helpers` package](https://www.npmjs.com/package/convex-helpers)
+- [Convex ESLint rules](https://docs.convex.dev/eslint)
 
 ### Core development
 

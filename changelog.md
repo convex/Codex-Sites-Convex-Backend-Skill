@@ -6,12 +6,16 @@ All notable changes to this project are documented here. This file follows [Keep
 
 ### Added
 
+- Optional `convex-helpers` selection guidance for matched code-level utilities.
+- Official Convex ESLint setup, validation, and project-verification guidance.
 - A production-bundle guard that rejects localhost, development deployment URLs, and Convex credential markers.
 - A publication-state classifier and regression fixture for a registered, public Site with no saved version or live URL.
 - Project file documentation, task tracking, and a PRD for the durable-publication workflow.
 
 ### Changed
 
+- Extended capability discovery from built-in primitives and Components to optional helper utilities without making them default dependencies.
+- Made new projects use the official Convex ESLint recommended rules while preserving existing project lint configuration.
 - Moved Quick Start ahead of the optional live demo and clarified that the demo is not the default architecture.
 - Clarified that Codex can run routine commands for beginners, documented how to open the project-scoped integrated terminal, and added an optional manual-command mode.
 - Added capability-based fallback, long-running server, approval, and secret-handling guidance without changing deployment workflow order.

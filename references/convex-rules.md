@@ -16,8 +16,12 @@ Apply these rules before editing any file in `convex/`.
 - Use generated `api` and `internal` references; never string function names.
 - Run `npx convex codegen` after API changes.
 - Suggest migration steps before changing fields that existing records may lack.
+- Prefer a documented built-in primitive or official Component before adding a utility dependency.
+- Use `convex-helpers` only for a named matched utility; sessions are not authentication, wrappers do not replace authorization, and JavaScript filters do not replace indexes.
+- Configure and run the official Convex ESLint recommended rules for new projects and compatible existing ESLint setups.
 
 Use the current `npx convex ai-files install` output and installed `convex:convex-expert` skill as the authoritative implementation layer when available.
+Read [helpers-and-eslint.md](helpers-and-eslint.md) before adding `convex-helpers` or changing ESLint configuration.
 
 Sources:
 
@@ -27,3 +31,5 @@ Sources:
 - https://docs.convex.dev/functions/actions
 - https://docs.convex.dev/functions/validation
 - https://docs.convex.dev/database/indexes
+- https://docs.convex.dev/eslint
+- https://github.com/get-convex/convex-helpers

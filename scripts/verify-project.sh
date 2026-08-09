@@ -96,6 +96,29 @@ else
   failures=$((failures + 1))
 fi
 
+eslint_config=""
+for candidate in eslint.config.js eslint.config.mjs eslint.config.cjs eslint.config.ts .eslintrc .eslintrc.js .eslintrc.cjs .eslintrc.json; do
+  if [[ -f "$candidate" ]]; then
+    eslint_config="$candidate"
+    break
+  fi
+done
+
+if [[ -f package.json ]] && rg -q '"@convex-dev/eslint-plugin"[[:space:]]*:' package.json; then
+  if [[ -n "$eslint_config" ]] && rg -q '(@convex-dev/eslint-plugin|plugin:@convex-dev/recommended|configs\.recommended)' "$eslint_config"; then
+    echo "OK: official Convex ESLint plugin is installed and referenced by $eslint_config"
+    echo "INFO: confirm the lint command covers the actual Convex source directory"
+  elif [[ -n "$eslint_config" ]]; then
+    echo "WARNING: @convex-dev/eslint-plugin is installed but $eslint_config does not reference its recommended rules"
+  else
+    echo "WARNING: @convex-dev/eslint-plugin is installed but no supported ESLint configuration file was found"
+  fi
+elif [[ -n "$eslint_config" ]]; then
+  echo "WARNING: $eslint_config exists without @convex-dev/eslint-plugin; follow https://docs.convex.dev/eslint"
+else
+  echo "INFO: ESLint is not configured; add the official Convex plugin for new projects or when adopting lint"
+fi
+
 if [[ -f package.json ]] && rg -q '@convex-dev/(self-)?static-hosting' package.json; then
   echo "FAILED: Convex static hosting is excluded; Codex Sites owns the frontend"
   failures=$((failures + 1))

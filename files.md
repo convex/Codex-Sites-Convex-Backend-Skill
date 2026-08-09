@@ -10,6 +10,7 @@
 - `references/bootstrap.md` — project initialization and official Convex agent setup.
 - `references/built-with-footer.md` — removable light/dark-aware attribution footer.
 - `references/components.md` — official Convex component discovery and static-hosting exclusion.
+- `references/helpers-and-eslint.md` — optional `convex-helpers` selection and official Convex ESLint quality rules.
 - `references/convex-doc-map.md` — official documentation routing by capability.
 - `references/convex-rules.md` — Convex implementation and review rules.
 - `references/deployment-and-qa.md` — detailed local, preview, production, publishing, access, and live-QA runbook.
@@ -23,5 +24,6 @@
 - `tests/fixtures/registered-public-unpublished.json` — regression state for a public but never-deployed Site.
 - `tests/test-publication-state.sh` — recovery-classification regression test.
 - `prds/2026-08-07-default-durable-publication.md` — implementation requirements for the durable-publication default.
+- `prds/2026-08-09-convex-helpers-eslint.md` — requirements for helper selection and Convex ESLint validation.
 - `changelog.md` — release-facing change history.
 - `task.md` — completed maintenance tasks with UTC timestamps.
