@@ -28,10 +28,10 @@ Read the current official sources before choosing a workflow:
 | Signed-in developer cloud development | Developer's personal cloud dev deployment | Convex team/project and signed-in developer | Saved Convex CLI user credentials | No; use the project's production deployment for publishing | Development data is separate from production |
 | Isolated cloud agent development | Deployment-scoped Convex Cloud dev deployment | Convex team/project that issued the scoped key | Dev-deployment-scoped `CONVEX_DEPLOY_KEY` | Yes, for a clearly labeled temporary shared preview; not for production | Preview data is isolated to that deployment but may be shared among visitors |
 | Convex Cloud production | Publicly reachable production deployment | Convex team/project or holder of its production-scoped key | Convex account/project or production-scoped deploy key | Yes | Data isolation depends on application authentication and backend authorization |
-| Codex Sites visitor access | Codex Sites gate in front of the frontend | Site owner/workspace administrators | Public access or authorized ChatGPT/OpenAI account | Controls who opens the frontend; does not deploy Convex | Visitors never need Convex accounts |
+| ChatGPT Sites visitor access | ChatGPT Sites gate in front of the frontend | Site owner or workspace administrators | Public access or authorized ChatGPT account | Controls who opens the frontend and does not deploy Convex | Visitors never need Convex accounts |
 | Product-level authentication | Application and protected Convex functions | Application owner | Product-specific visitor identity | Independent of Sites access | Determines whether records are shared or isolated per authenticated user |
 
-Accountless local Agent Mode runs a backend on the developer's machine. It needs neither a Convex login nor a deploy key, cannot serve a published Codex Site, and must keep `npx convex dev` running during local development. A live Site needs a publicly reachable Convex Cloud URL: use an expiring isolated cloud dev deployment only for a clearly labeled temporary shared preview, and use the confirmed production deployment for production. Developers need access to the owning Convex team/project or an appropriately scoped key. A Convex Pro plan is not required merely to publish. Visitors never need Convex accounts.
+Accountless local Agent Mode runs a backend on the developer's machine. It needs neither a Convex login nor a deploy key, cannot serve a published ChatGPT Site, and must keep `npx convex dev` running during local development. A live Site needs a publicly reachable Convex Cloud URL. Use an expiring isolated cloud dev deployment only for a clearly labeled temporary shared preview, and use the confirmed production deployment for production. Developers need access to the owning Convex team or project or an appropriately scoped key. A Convex Pro plan is not required merely to publish. Visitors never need Convex accounts.
 
 ## Detect credentials without exposing them
 
@@ -81,7 +81,7 @@ The Sites frontend and its URL do not automatically expire with Convex. Warn tha
 
 ## Separate Sites access from application authentication
 
-Changing a Site from `custom` to `public` changes only the Codex Sites visitor gate. It does not deploy Convex, move Convex data, change the Convex plan, or create Convex visitor accounts. It requires explicit user authorization.
+Changing a Site from `custom` to `public` changes only the ChatGPT Sites visitor gate. It does not deploy Convex, move Convex data, change the Convex plan, or create Convex visitor accounts. It requires explicit user authorization.
 
 If `get_site` already reports `public`, preserve that setting and do not request the same access-policy change again. Continue the publication lifecycle. Fresh target-specific authorization is still required immediately before every Convex production deployment.
 
@@ -116,7 +116,7 @@ Obtain explicit authorization after this warning and before changing access. If 
 
 Every published handoff must report:
 
-1. Exact clickable Codex Sites URL.
+1. Exact clickable ChatGPT Sites URL.
 2. Sites access mode.
 3. Whether visitors must sign in with ChatGPT/OpenAI.
 4. That visitors do not need Convex accounts.

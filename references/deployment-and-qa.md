@@ -36,10 +36,10 @@ Open the app folder in Codex, start a task, and paste one complete prompt into t
 
 ```text
 $codex-sites-convex Build, validate, and publish this app as a durable shared
-Codex Site backed by Convex production.
+ChatGPT Site backed by Convex production.
 
 Build and validate locally first, including a Convex query, mutation, and
-realtime update. Register or reuse the Codex Site, inspect its current access
+realtime update. Register or reuse the ChatGPT Site, inspect its current access
 and publication state, and explain whether visitors share data. Get explicit
 authorization before changing access to public; preserve an already-public
 policy without asking for the same change again.
@@ -64,7 +64,7 @@ Do not stop at an intermediate state unless authorization or the platform blocks
 
 ```text
 $codex-sites-convex Set up this app for accountless local development with
-Codex Sites and Convex. If this folder is not already a Codex Sites project,
+ChatGPT Sites and Convex. If this folder is not already a ChatGPT Sites project,
 initialize Sites in this same folder and preserve its normal project structure.
 Run the skill's runtime gate before npm, npx, or project scripts. Require Node
 22.13.0 or newer and recommend Node 24 LTS. For a new project, add the Node 24
@@ -88,7 +88,7 @@ does not create hosted Sites environment variables.
 
 ```text
 $codex-sites-convex Publish this app as a temporary shared preview using Convex
-Cloud Agent Mode and Codex Sites.
+Cloud Agent Mode and ChatGPT Sites.
 
 Confirm the intended Convex team and project. Reuse an existing isolated cloud
 development deployment only after verifying its scope and expiration, or create
@@ -97,7 +97,7 @@ never expose its deploy key in browser code.
 
 Configure the cloud dev deployment's required environment variables without
 printing secret values, then push the Convex functions with npx convex dev
---once. Rebuild Codex Sites with that deployment's public convex.cloud URL and
+--once. Rebuild ChatGPT Sites with that deployment's public convex.cloud URL and
 confirm the bundle contains no deploy key, backend secret, localhost URL, or
 unintended deployment URL.
 
@@ -199,7 +199,7 @@ Never use `npx convex dev` as the production deployment step, and never publish 
 
 The only exception to the development-backend publishing rule is an explicitly requested, expiring temporary shared preview that follows the safeguards above and is labeled as non-production in every handoff.
 
-## Choose who can open the Codex Site
+## Choose who can open the ChatGPT Site
 
 Resolve and explain the access choice before calling a Sites deployment or access-update tool:
 
@@ -249,7 +249,7 @@ Do not present an older URL as the new deployment and do not use the word “pub
 
 1. Read `project_id` from `.openai/hosting.json`.
 2. Call `get_site` with that project identifier.
-3. Use `current_live_url` as the canonical Codex Sites URL.
+3. Use `current_live_url` as the canonical ChatGPT Sites URL.
 
 If `current_live_url` is empty, report that the Site is registered but not confirmed published. Never guess, derive, or reconstruct the URL from the project slug.
 
@@ -265,7 +265,7 @@ If `current_live_url` is empty, report that the Site is registered but not confi
 Use this reliable short prompt:
 
 ```text
-$codex-sites-convex Build, validate, and publish the latest version to Codex Sites.
+$codex-sites-convex Build, validate, and publish the latest version to ChatGPT Sites.
 ```
 
 ## Explain access accurately
@@ -374,7 +374,7 @@ This is not production. It uses an isolated Convex Cloud dev deployment that exp
 
 After expiration, the Sites URL may still open, but backend reads, writes, schedules, and realtime updates will stop. To promote it, configure and deploy the confirmed production Convex backend, decide how to handle preview data, rebuild Sites with the production URL, save and deploy a new version, and repeat live QA.
 
-For future updates, ask Codex: `$codex-sites-convex Build, validate, and publish the latest version to Codex Sites.`
+For future updates, ask Codex: `$codex-sites-convex Build, validate, and publish the latest version to ChatGPT Sites.`
 
 To manage this Site later, open Sites in ChatGPT or visit https://chatgpt.com/sites, select the Site, then open Settings.
 
@@ -384,7 +384,7 @@ Your Site is live: [Open the Site](SITE_URL)
 
 It is private. Open the link and sign in with an authorized ChatGPT/OpenAI account. Visitors do not need Convex accounts.
 
-For future updates, ask Codex: `$codex-sites-convex Build, validate, and publish the latest version to Codex Sites.`
+For future updates, ask Codex: `$codex-sites-convex Build, validate, and publish the latest version to ChatGPT Sites.`
 
 To manage this Site later, open Sites in ChatGPT or visit https://chatgpt.com/sites, select the Site, then open Settings.
 
@@ -394,13 +394,13 @@ Your Site is live: [Open the Site](SITE_URL)
 
 It is public, so anyone with the link can visit without signing in or creating a Convex account.
 
-For future updates, ask Codex: `$codex-sites-convex Build, validate, and publish the latest version to Codex Sites.`
+For future updates, ask Codex: `$codex-sites-convex Build, validate, and publish the latest version to ChatGPT Sites.`
 
 To manage this Site later, open Sites in ChatGPT or visit https://chatgpt.com/sites, select the Site, then open Settings.
 
 For `workspace_all`, `custom`, or `admins_only`, use the private template and add the precise access explanation returned by `get_site`. Every successful handoff must include this exact sentence:
 
-For future updates, ask Codex: `$codex-sites-convex Build, validate, and publish the latest version to Codex Sites.`
+For future updates, ask Codex: `$codex-sites-convex Build, validate, and publish the latest version to ChatGPT Sites.`
 
 Sources:
 

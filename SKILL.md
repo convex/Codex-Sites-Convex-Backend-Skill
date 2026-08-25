@@ -1,9 +1,9 @@
 ---
 name: codex-sites-convex
-description: Build, extend, validate, and publish a Codex Sites application whose durable database and backend functions run on Convex. Use when a user invokes $codex-sites-convex, selects this skill from the skill picker, asks for a Codex Site backed by Convex, or asks to add Convex data, realtime queries, mutations, authentication, files, schedules, or actions to an existing Codex Sites project.
+description: Build, extend, validate, and publish a ChatGPT Sites application whose durable database and backend functions run on Convex. Use when a user invokes $codex-sites-convex, selects this skill from the skill picker, asks for a ChatGPT Site backed by Convex, or asks to add Convex data, realtime queries, mutations, authentication, files, schedules, or actions to an existing ChatGPT Sites project.
 ---
 
-# Codex Sites + Convex
+# ChatGPT Sites + Convex
 
 Build the complete application, validate both halves, and publish it unless the user explicitly requests local-only work.
 
@@ -18,7 +18,7 @@ Do not stop a publication workflow after local validation, cloud linking, Site r
 
 ## Non-negotiable architecture
 
-- Keep the frontend, frontend build, published URL, and sharing in Codex Sites.
+- Keep the frontend, frontend build, published URL, and sharing in ChatGPT Sites.
 - Keep all durable application data and backend execution in Convex.
 - Connect browser components through the public Convex React client and generated `api` types.
 - Treat the Convex MCP server as a development tool, never as the visitor runtime.
@@ -55,15 +55,15 @@ Report these Sites states separately; never use one as proof of another:
 3. **Saved Sites version:** the current build was uploaded and saved as a version. Registration alone does not create or deploy a version.
 4. **Published Site:** a saved version deployed successfully and `get_site.current_live_url` is nonempty. A deployment URL or successful save alone is not sufficient.
 
-For a new Codex user, explain that they paste the `$codex-sites-convex` prompt into a Codex task opened on their app folder. Treat the task box as an instruction composer, not direct shell input. When command tools are available, run routine setup, validation, and build commands directly instead of making the user copy them. If the user prefers manual execution, tell them to select the terminal icon in the upper-right corner or press `Ctrl` plus the backtick key, confirm it is using the same project root, show commands in order, and distinguish commands that exit from development servers that must remain running. If the current surface cannot access project files or run commands, direct the user to the Codex desktop app, Codex CLI, or another command-capable Codex environment. Ask the user only for required approval, authentication, account or project selection, secure secret entry, a user-interface action, or a real platform blocker. Do not assume they know what “project root,” “terminal,” or a command approval means.
+For a new Codex user, explain that they paste the `$codex-sites-convex` prompt into a Codex task opened on their app folder. Treat the task box as an instruction composer, not direct shell input. When command tools are available, run routine setup, validation, and build commands directly instead of making the user copy them. If the user prefers manual execution, tell them to select the terminal icon in the upper right corner or press `Ctrl` plus the backtick key, confirm it is using the same project root, show commands in order, and distinguish commands that exit from development servers that must remain running. If the current surface cannot access project files or run commands, direct the user to the Codex desktop app, Codex CLI, or another command capable Codex environment. Ask the user only for required approval, authentication, account or project selection, secure secret entry, a user interface action, or a real platform blocker. Do not assume they know what “project root,” “terminal,” or a command approval means.
 
 Classify `CONVEX_DEPLOYMENT`, the presence and scope of `CONVEX_DEPLOY_KEY`, saved Convex CLI user configuration, and the public Convex URL without printing credentials or configuration contents. No login prompt does not prove accountless mode; saved CLI credentials may already be active.
 
 Classify the task:
 
-- **Empty/projectless directory:** initialize Codex Sites first, then add Convex to that same project.
+- **Empty/projectless directory:** initialize ChatGPT Sites first, then add Convex to that same project.
 - **Existing local Sites project:** preserve its structure, report whether it is registered, and add or extend Convex.
-- **Existing Convex project without Sites:** preserve `convex/` and initialize the Sites frontend around it; do not scaffold another product app.
+- **Existing Convex project without Sites:** preserve `convex/` and initialize the ChatGPT Sites frontend around it; do not scaffold another product app.
 - **Both already present:** make only the requested product changes.
 
 Confirm an existing Convex project only when the same project root has both a `convex` dependency in `package.json` and either `convex/` or `convex.json`. In a monorepo, use the nearest unambiguous matching root. Do not install managed Convex AI files when project ownership is missing or ambiguous.
@@ -122,7 +122,7 @@ Before implementing any product capability:
 7. If no Component is selected and the capability needs a common code-level utility, check the current `convex-helpers` repository and package documentation. Install it only for a named matched utility; it is not a Component or default dependency.
 8. Record the selected Component or helper, or the reason neither was selected, in the task update.
 
-Never select or install a Convex static-hosting component. Codex Sites owns the frontend build, published URL, and sharing.
+Never select or install a Convex static-hosting component. ChatGPT Sites owns the frontend build, published URL, and sharing.
 
 Use `scripts/check-components.sh <keywords>` for a quick catalog search. Treat its output as discovery only; read the matched component skill and official documentation before implementation.
 
@@ -185,7 +185,7 @@ Propose schema changes before implementing them. Then build the smallest coheren
 - Never throw during React render when `NEXT_PUBLIC_CONVEX_URL` is missing. Render a clear configuration/setup state and construct `ConvexReactClient` only after a valid URL exists.
 - Keep developer account and deployment setup out of normal visitor UI. If a public Site lacks product authentication and per-user authorization, warn that visitors share Convex data before requesting authorization to publish publicly.
 
-Add the removable “Built with Codex Sites + Convex” footer from [references/built-with-footer.md](references/built-with-footer.md) unless the user explicitly asks to omit or remove it. Use the bundled light/dark logo assets, follow the Site's resolved theme, use the Phosphor GitHub logo for the repository link, link each brand to its official site, and preserve the removal comment in source code.
+Add the removable “Built with ChatGPT Sites + Convex” footer from [references/built-with-footer.md](references/built-with-footer.md) unless the user explicitly asks to omit or remove it. Use the bundled light and dark logo assets, follow the Site's resolved theme, use the Phosphor GitHub logo for the repository link, link each brand to its official site, and preserve the removal comment in source code.
 
 ### 9. Validate in proportion to risk
 
@@ -254,7 +254,7 @@ Every published handoff must explain how to reopen the Site in ChatGPT Sites and
 
 Every successful first-publication and update handoff must include this exact instruction:
 
-> For future updates, ask Codex: `$codex-sites-convex Build, validate, and publish the latest version to Codex Sites.`
+> For future updates, ask Codex: `$codex-sites-convex Build, validate, and publish the latest version to ChatGPT Sites.`
 
 Every temporary-preview handoff must begin with the live Sites URL and label `Temporary shared preview`. Report the exact Convex deployment expiration, Sites access mode, visitor sign-in requirements, whether data is shared or isolated, what fails after expiration, and the steps required to promote to production.
 

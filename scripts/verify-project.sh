@@ -126,10 +126,10 @@ else
 fi
 
 if [[ -f package.json ]] && rg -q '@convex-dev/(self-)?static-hosting' package.json; then
-  echo "FAILED: Convex static hosting is excluded; Codex Sites owns the frontend"
+  echo "FAILED: Convex static hosting is excluded; ChatGPT Sites owns the frontend"
   failures=$((failures + 1))
 else
-  echo "OK: frontend hosting remains assigned to Codex Sites"
+  echo "OK: frontend hosting remains assigned to ChatGPT Sites"
 fi
 
 if [[ -f convex/_generated/api.d.ts || -f convex/_generated/api.js ]]; then

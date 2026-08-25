@@ -1,16 +1,16 @@
-# Codex Sites + Convex
+# ChatGPT Sites + Convex
 
-Build and ship a [Codex Site](https://openai.com/academy/chatgpt-sites/) with [Convex](https://www.convex.dev/) as its realtime database and backend—using one reusable Codex skill.
+Build and ship a [ChatGPT Site](https://learn.chatgpt.com/docs/sites?surface=app) with [Convex](https://www.convex.dev/) as its realtime database and backend using one reusable Codex skill.
 
 > **Quick start:** Install the skill, restart Codex, then prompt: `$codex-sites-convex Build and publish a durable shared realtime project tracker for my team.` Publishing or sharing uses Convex production by default and returns a live Sites URL.
 
-> **Optional live example:** [Open Daymark Todo](https://daymark-todo.waynesutton.chatgpt.site/). It demonstrates a public, shared realtime list powered by Codex Sites and Convex, with a Convex cron job that clears Todos every five minutes. [Learn how cron jobs work](https://docs.convex.dev/scheduling/cron-jobs). This demo is not required for installation or use and should not be treated as the default app architecture.
+> **Optional live example:** [Open Daymark Todo](https://daymark-todo.waynesutton.chatgpt.site/). It demonstrates a public, shared realtime list powered by ChatGPT Sites and Convex, with a Convex cron job that clears Todos every five minutes. [Learn how cron jobs work](https://docs.convex.dev/scheduling/cron-jobs). This demo is not required for installation or use and should not be treated as the default app architecture.
 
 ## Why this skill?
 
-Codex Sites and Convex have complementary responsibilities:
+ChatGPT Sites and Convex have complementary responsibilities:
 
-- **Codex Sites** creates, builds, publishes, and shares the frontend.
+- **ChatGPT Sites** creates, builds, publishes, and shares the frontend.
 - **Convex** provides the database, queries, mutations, actions, authentication, schedules, search, files, and realtime subscriptions.
 - **This skill** makes Codex preserve that boundary, check current official documentation, select appropriate Convex components, validate both halves, and publish in the correct order.
 
@@ -20,7 +20,7 @@ Without a dedicated workflow, an agent can scaffold a second frontend, introduce
 
 - A complete build-and-publish workflow in [`SKILL.md`](SKILL.md)
 - New-project and existing-project paths
-- Codex Sites architecture safeguards
+- ChatGPT Sites architecture safeguards
 - Current Convex documentation routing
 - Official [Convex agent setup](https://www.convex.dev/agent-setup.md) checks for plugin, MCP, and managed AI files
 - Official Convex component discovery before implementation
@@ -35,14 +35,14 @@ Without a dedicated workflow, an agent can scaffold a second frontend, introduce
 - A Node.js 22.13+ runtime gate, Node 24 project pins, and project-owned `dev`, `build`, and `start` checks
 - Expected-port enforcement, exact localhost HTTP verification, and process-lifetime guidance
 - Production deployment ordering and Chrome QA
-- A removable, light/dark-aware “Built with Codex Sites + Convex” footer using bundled artwork and a Phosphor GitHub icon
+- A removable “Built with ChatGPT Sites + Convex” footer with light and dark theme support and a Phosphor GitHub icon
 - Deterministic preflight and project verification scripts
 
 ## Architecture
 
 ```mermaid
 flowchart LR
-    U["User's browser"] --> S["Codex Sites frontend"]
+    U["User's browser"] --> S["ChatGPT Sites frontend"]
     S -->|"Queries, mutations, subscriptions"| C["Convex deployment"]
     C --> D["Convex database"]
     C --> F["Functions, files, schedules, search"]
@@ -68,7 +68,7 @@ flowchart LR
     D --> LIVE["Published Site<br/>confirmed by get_site.current_live_url"]
 ```
 
-## Four Codex Sites states
+## Four ChatGPT Sites states
 
 | State | Required evidence |
 | --- | --- |
@@ -87,16 +87,16 @@ These states are not interchangeable. A hosting manifest alone does not prove re
 | Signed-in developer cloud dev | Saved Convex CLI credentials | Development only unless the user explicitly requests a temporary shared preview |
 | Isolated cloud agent dev | Deployment-scoped development key | Yes for a labeled, expiring temporary preview; never production |
 | Convex Cloud production | Convex project/account or production-scoped key | Yes |
-| Codex Sites visitors | Public access or authorized ChatGPT/OpenAI account | Visitors never need Convex accounts |
+| ChatGPT Sites visitors | Public access or authorized ChatGPT account | Visitors never need Convex accounts |
 | Product authentication | App-specific visitor identity | Controls shared versus per-user data inside the app |
 
-A Convex Pro plan is not required merely to publish. Codex Sites access controls who can open the frontend; application authentication and Convex authorization control which records a visitor can read or change. See [accounts, access, and ownership](references/accounts-access-and-ownership.md), [Agent Mode](references/agent-mode.md), and [deployment and QA](references/deployment-and-qa.md).
+A Convex Pro plan is not required merely to publish. ChatGPT Sites access controls who can open the frontend. Application authentication and Convex authorization control which records a visitor can read or change. See [accounts, access, and ownership](references/accounts-access-and-ownership.md), [Agent Mode](references/agent-mode.md), and [deployment and QA](references/deployment-and-qa.md).
 
 ## How Sites and Convex work together
 
 ```text
 Visitor browser
-→ Codex Sites frontend
+→ ChatGPT Sites frontend
 → NEXT_PUBLIC_CONVEX_URL
 → Convex Cloud deployment
 → Convex queries, mutations, actions, and data
@@ -187,7 +187,7 @@ If the current task cannot access the project files or run commands, open the pr
 ### Option 1: Install for your Codex user
 
 ```bash
-git clone https://github.com/waynesutton/Codex-Sites-Convex-Backend-Skill.git \
+git clone https://github.com/get-convex/Codex-Sites-Convex-Backend-Skill.git \
   ~/.codex/skills/codex-sites-convex
 ```
 
@@ -199,7 +199,7 @@ From the project root:
 
 ```bash
 mkdir -p .agents/skills
-git clone https://github.com/waynesutton/Codex-Sites-Convex-Backend-Skill.git \
+git clone https://github.com/get-convex/Codex-Sites-Convex-Backend-Skill.git \
   .agents/skills/codex-sites-convex
 ```
 
@@ -233,11 +233,11 @@ More examples:
 ```text
 $codex-sites-convex Build a launch tracker with milestones, owners, risks, and weekly updates.
 
-$codex-sites-convex Add Convex authentication and per-user workspaces to this existing Codex Site.
+$codex-sites-convex Add Convex authentication and per user workspaces to this existing ChatGPT Site.
 
 $codex-sites-convex Add realtime comments, presence, and notifications to this project.
 
-$codex-sites-convex Review this Codex Sites + Convex app, fix backend issues, and publish it.
+$codex-sites-convex Review this ChatGPT Sites + Convex app, fix backend issues, and publish it.
 ```
 
 ## Three deployment workflows
@@ -255,11 +255,11 @@ You do not need to open a separate Terminal app or type every command yourself. 
 
 ### Default: Build and publish a durable shared Site
 
-Use this prompt when creating and publishing a Codex Site for the first time.
+Use this prompt when creating and publishing a ChatGPT Site for the first time.
 
 ```text
 $codex-sites-convex Build, validate, and publish this app as a durable shared
-Codex Site backed by Convex production.
+ChatGPT Site backed by Convex production.
 
 Before package installation or any project Node command, check the selected
 Node executable. Require Node.js 22.13.0 or newer and use Node.js 24 LTS for a
@@ -268,7 +268,7 @@ the existing package manager, dependencies, scripts, lockfile, and unrelated
 changes.
 
 Build and validate locally first. Verify a Convex query, mutation, and realtime
-update. Register the Codex Site once or reuse its project_id, then inspect
+update. Register the ChatGPT Site once or reuse its project_id, then inspect
 get_site access, latest version, current_live_url, Sites environment-variable
 names, and the frontend Convex URL without displaying credentials.
 
@@ -283,7 +283,7 @@ team, project, deployment, public URL, and expected changes. Get my fresh
 target-specific confirmation immediately before deploying Convex production.
 Deploy Convex first and capture its exact production convex.cloud URL.
 
-Only after that URL is known, set NEXT_PUBLIC_CONVEX_URL in Codex Sites as
+Only after that URL is known, set NEXT_PUBLIC_CONVEX_URL in ChatGPT Sites as
 non-secret public configuration and rebuild. Fail if the finished browser bundle
 contains localhost, the development deployment URL, a deployment key, or any
 backend secret, or if it does not contain the exact production URL.
@@ -303,7 +303,7 @@ platform blocker occurs. Do not add product authentication unless I request it.
 
 ```text
 $codex-sites-convex Set up this app for accountless local development with
-Codex Sites and Convex. If this folder is not already a Codex Sites project,
+ChatGPT Sites and Convex. If this folder is not already a ChatGPT Sites project,
 initialize Sites in this same folder and preserve its normal project structure.
 
 Before npm install, npx, or another project Node command, run the skill's
@@ -332,7 +332,7 @@ variables.
 
 ```text
 $codex-sites-convex Publish this app as a temporary shared preview using Convex
-Cloud Agent Mode and Codex Sites.
+Cloud Agent Mode and ChatGPT Sites.
 
 Run the skill's Node runtime gate before package installation or project Node
 commands. Require Node.js 22.13.0 or newer, recommend Node.js 24 LTS, and stop
@@ -345,7 +345,7 @@ never expose its deploy key in browser code.
 
 Configure the cloud dev deployment's required environment variables without
 printing secret values, then push the Convex functions with npx convex dev
---once. Rebuild Codex Sites with that deployment's public convex.cloud URL and
+--once. Rebuild ChatGPT Sites with that deployment's public convex.cloud URL and
 confirm the bundle contains no deploy key, backend secret, localhost URL, or
 unintended deployment URL.
 
@@ -372,7 +372,7 @@ For a new Codex or Convex user:
 4. Let Codex inspect the existing Site and Convex connection. Review any access or production-deployment approval before accepting it.
 
 ```text
-$codex-sites-convex Build, validate, and publish the latest version to Codex
+$codex-sites-convex Build, validate, and publish the latest version to ChatGPT
 Sites.
 
 Run the skill's Node runtime gate before package installation or project Node
@@ -406,15 +406,15 @@ URL first and explain its current access mode.
 Short version for routine updates:
 
 ```text
-$codex-sites-convex Build, validate, and publish the latest version to Codex Sites.
+$codex-sites-convex Build, validate, and publish the latest version to ChatGPT Sites.
 ```
 
-Codex will inspect the workspace, preserve existing architecture, check current official Convex components and documentation, implement the smallest complete product, run validation, deploy Convex first, and publish the frontend through Codex Sites.
+Codex will inspect the workspace, preserve existing architecture, check current official Convex components and documentation, implement the smallest complete product, run validation, deploy Convex first, and publish the frontend through ChatGPT Sites.
 
 Remove the optional footer at any time with this one-line prompt:
 
 ```text
-$codex-sites-convex Remove the entire “Built with Codex Sites + Convex” footer, its GitHub repository link, Phosphor GitHub icon import, and all unused public/built-with logo assets. Uninstall @phosphor-icons/react only if nothing else uses it, then run the frontend build.
+$codex-sites-convex Remove the entire “Built with ChatGPT Sites + Convex” footer, its GitHub repository link, Phosphor GitHub icon import, and all unused public logo assets. Uninstall @phosphor-icons/react only if nothing else uses it, then run the frontend build.
 ```
 
 The footer follows the Site's resolved theme. It uses the color Convex wordmark in light mode, the white wordmark in dark mode, and a Phosphor GitHub icon that inherits the current text color. A manual Site theme takes priority over the operating-system preference.
@@ -500,7 +500,7 @@ The production Sites bundle must point to the production Convex URL—not localh
 Ask Codex:
 
 ```text
-$codex-sites-convex Build, validate, and publish the latest version to Codex Sites. Make the Site public so anyone with the link can use it without signing in.
+$codex-sites-convex Build, validate, and publish the latest version to ChatGPT Sites. Make the Site public so anyone with the link can use it without signing in.
 ```
 
 Codex must explain that `public` allows anyone with the URL to visit and obtain your authorization before it publishes publicly or changes existing access. Workspace policy may prevent public publishing; if so, Codex should report that blocker instead of weakening another setting.
@@ -510,11 +510,11 @@ Codex must explain that `public` allows anyone with the URL to visit and obtain 
 Choose the audience in your prompt:
 
 ```text
-$codex-sites-convex Build, validate, and publish the latest version to Codex Sites for all active members of my ChatGPT/OpenAI workspace.
+$codex-sites-convex Build, validate, and publish the latest version to ChatGPT Sites for all active members of my ChatGPT workspace.
 
-$codex-sites-convex Build, validate, and publish the latest version to Codex Sites. Keep it private and grant access to alex@example.com.
+$codex-sites-convex Build, validate, and publish the latest version to ChatGPT Sites. Keep it private and grant access to alex@example.com.
 
-$codex-sites-convex Build, validate, and publish the latest version to Codex Sites for owners and administrators only.
+$codex-sites-convex Build, validate, and publish the latest version to ChatGPT Sites for owners and administrators only.
 ```
 
 The corresponding access modes are `workspace_all`, `custom`, and `admins_only`. Private visitors open the returned Sites URL and sign in with the authorized ChatGPT/OpenAI account. Signing in to Convex does not grant Site access.
@@ -532,7 +532,7 @@ Visitors never need Convex accounts. Developers need a Convex account only to ma
 
 The skill never makes a Site public or adds users or groups without explicit authorization. For `custom` access, it preserves the complete existing allowlist when adding users. Adding an email grants access but does not send an invitation email.
 
-For future updates, ask Codex: `$codex-sites-convex Build, validate, and publish the latest version to Codex Sites.`
+For future updates, ask Codex: `$codex-sites-convex Build, validate, and publish the latest version to ChatGPT Sites.`
 
 ## Convex Agent Mode and accounts
 
@@ -541,7 +541,7 @@ For future updates, ask Codex: `$codex-sites-convex Build, validate, and publish
 | Local agent development | `npx convex dev --once` provisions an accountless local backend | No |
 | Interactive local preview | Keep `npx convex dev` running beside one Sites server | No for a local backend |
 | Cloud-agent development | Isolated cloud dev deployment with a deployment-scoped key | Yes |
-| Temporary shared preview | Expiring isolated cloud dev deployment plus a published Codex Site | Yes for the developer; never for visitors |
+| Temporary shared preview | Expiring isolated cloud dev deployment plus a published ChatGPT Site | Yes for the developer; never for visitors |
 | Production publishing | Convex cloud project and production deployment | Yes |
 | Site visitors | Public Convex client connection | No, unless the product itself adds authentication |
 
@@ -632,7 +632,7 @@ Before adding backend infrastructure, the skill checks:
 - [Convex documentation index for LLMs](https://docs.convex.dev/llms.txt)
 - Existing project dependencies and component registrations
 
-If an official component directly fits the requested capability, the skill fetches and follows that component’s linked `SKILL.md`. Otherwise it uses the documented built-in Convex primitive. Frontend ownership always remains with Codex Sites.
+If an official component directly fits the requested capability, the skill fetches and follows that component’s linked `SKILL.md`. Otherwise it uses the documented built in Convex primitive. Frontend ownership always remains with ChatGPT Sites.
 
 Run component discovery manually:
 
@@ -755,14 +755,11 @@ Never accept a fallback port or local-only success as proof that the published i
 codex-sites-convex/
 ├── SKILL.md
 ├── README.md
-├── changelog.md
 ├── files.md
-├── task.md
 ├── agents/
 │   └── openai.yaml
 ├── assets/
 │   ├── check-node-version.mjs
-│   ├── codex-color.svg
 │   ├── convex-color.svg
 │   └── convex-white.svg
 ├── references/
@@ -778,10 +775,6 @@ codex-sites-convex/
 │   ├── helpers-and-eslint.md
 │   ├── local-runtime-and-server.md
 │   └── sites-settings-and-environment.md
-├── prds/
-│   ├── 2026-08-07-default-durable-publication.md
-│   ├── 2026-08-09-convex-helpers-eslint.md
-│   └── 2026-08-09-runtime-localhost-hardening.md
 ├── scripts/
 │   ├── check-backend-ready.sh
 │   ├── check-components.sh
@@ -803,7 +796,7 @@ codex-sites-convex/
 ## Requirements
 
 - Codex desktop app or Codex CLI with skill support
-- A ChatGPT workspace with Codex Sites enabled
+- A ChatGPT plan with Sites access
 - Node.js 22.13.0 or newer; Node.js 24 LTS is recommended
 - The existing project package manager; new Sites starters use npm and `npx`
 - No Convex account for accountless local agent development
@@ -967,7 +960,7 @@ The skill requires Codex to:
 
 ## Contributing
 
-Issues and pull requests are welcome. Keep changes focused on the Codex Sites frontend + Convex backend workflow, prefer current official documentation over copied API details, and validate the skill before submitting:
+Issues and pull requests are welcome. Keep changes focused on the ChatGPT Sites frontend and Convex backend workflow, prefer current official documentation over copied API details, and validate the skill before submitting:
 
 ```bash
 python3 /path/to/skill-creator/scripts/quick_validate.py .
@@ -987,4 +980,4 @@ When changing component discovery, also run:
 
 ## Repository
 
-[github.com/waynesutton/Codex-Sites-Convex-Backend-Skill](https://github.com/waynesutton/Codex-Sites-Convex-Backend-Skill)
+[github.com/get-convex/Codex-Sites-Convex-Backend-Skill](https://github.com/get-convex/Codex-Sites-Convex-Backend-Skill)

@@ -49,7 +49,7 @@ const localBackend = /^(https?:\/\/)?(localhost|127\.0\.0\.1)(:|\/|$)/i.test(fro
 
 if (!projectId) {
   console.log("PUBLICATION STATE: UNREGISTERED");
-  console.log("NEXT ACTION: register the Codex Site once and persist project_id");
+  console.log("NEXT ACTION: register the ChatGPT Site once and persist project_id");
   process.exit(1);
 }
 

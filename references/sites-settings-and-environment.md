@@ -60,13 +60,13 @@ Available settings can vary by plan, region, workspace policy, and the current S
 
 ```text
 Visitor browser
-→ Codex Sites frontend
+→ ChatGPT Sites frontend
 → NEXT_PUBLIC_CONVEX_URL
 → Convex Cloud deployment
 → Convex queries, mutations, actions, and data
 ```
 
-- Codex Sites hosts the frontend.
+- ChatGPT Sites hosts the frontend.
 - Convex hosts the database and backend functions.
 - `NEXT_PUBLIC_CONVEX_URL` tells `ConvexReactClient` which deployment to connect to.
 - The Convex deployment URL is public configuration, not a password. Knowing it does not grant dashboard or deployment access.
@@ -81,7 +81,7 @@ Visitor browser
 | Layer | Location | Purpose | Rules |
 | --- | --- | --- | --- |
 | Local frontend | `.env.local` | Local development settings, local or development Convex URL, and frontend configuration | Keep it out of Git. Keep `.env.example` aligned by variable name without real secrets. A localhost Convex URL cannot power a published Site. |
-| Hosted Codex Sites | Sites → Site → Settings → Environment variables | Configuration available to the hosted frontend or Sites worker | Do not store hosted values in `.openai/hosting.json`. Redeploy an approved saved version after changes. Rebuild first when browser JavaScript embeds the value. Browser-public prefixes are visible to visitors. Mark only true server-side values as Secret. |
+| Hosted ChatGPT Sites | Sites → Site → Settings → Environment variables | Configuration available to the hosted frontend or Sites worker | Do not store hosted values in `.openai/hosting.json`. Redeploy an approved saved version after changes. Rebuild first when browser JavaScript embeds the value. Browser public prefixes are visible to visitors. Mark only true server side values as Secret. |
 | Convex deployment | Convex dashboard deployment settings or Convex CLI environment commands | Secrets and configuration read by Convex functions | Convex functions do not read frontend `.env.local`. Development and production values are separate. Third-party keys used by actions belong here. Set production values on production. |
 
 A Secret switch cannot make a browser-public variable safe. Never copy a Convex backend secret into `NEXT_PUBLIC_*`, `VITE_*`, or another browser-public variable.

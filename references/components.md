@@ -21,7 +21,7 @@ Do not copy a catalog version into implementation instructions. Use the package/
 - Prefer built-in Convex primitives for small, straightforward behavior that does not justify another dependency.
 - Do not install components speculatively.
 - Do not replace a working project integration without a user-visible benefit and migration plan.
-- Do not select any Convex static-hosting component. The frontend remains on Codex Sites.
+- Do not select any Convex static hosting component. The frontend remains on ChatGPT Sites.
 
 ## Current capability families
 

@@ -4,8 +4,8 @@
 
 | Concern | Owner |
 | --- | --- |
-| React UI, layout, browser interactions | Codex Sites project |
-| Frontend build, URL, access, sharing | Codex Sites |
+| React UI, layout, browser interactions | ChatGPT Sites project |
+| Frontend build, URL, access, sharing | ChatGPT Sites |
 | Tables, indexes, durable records | Convex |
 | Queries, mutations, actions, schedules | Convex |
 | Realtime subscriptions | Convex React client |
@@ -16,7 +16,7 @@ The browser receives only the public Convex deployment URL and user-facing confi
 
 ```text
 Visitor browser
-→ Codex Sites frontend
+→ ChatGPT Sites frontend
 → NEXT_PUBLIC_CONVEX_URL
 → Convex Cloud deployment
 → Convex queries, mutations, actions, and data

@@ -35,7 +35,7 @@ Do not force login. Do not use the legacy `CONVEX_AGENT_MODE=anonymous` flag. Fu
 
 Local mode is best for ephemeral development that does not require inbound public webhooks, dashboard access, or cloud-only integrations.
 
-The local backend runs as a subprocess of `npx convex dev` and stops when that process stops. It cannot serve a published Codex Site. Never infer accountless mode only from the absence of a login prompt; saved CLI credentials may have been reused.
+The local backend runs as a subprocess of `npx convex dev` and stops when that process stops. It cannot serve a published ChatGPT Site. Never infer accountless mode only from the absence of a login prompt. Saved CLI credentials may have been reused.
 
 Accountless provisioning may write a local `NEXT_PUBLIC_CONVEX_URL` to `.env.local`. It does not create or update the hosted Sites environment. Linking the folder to Convex Cloud provides managed development and production deployments, but Sites must receive the exact production URL separately after production deployment is selected and deployed.
 
@@ -59,7 +59,7 @@ Set required deployment environment variables after creating or selecting the de
 
 ## Temporary shared Sites preview
 
-An isolated cloud dev deployment is publicly reachable and may back a temporary shared Codex Site. Treat this as an explicit preview exception to the production-only publishing path:
+An isolated cloud dev deployment is publicly reachable and may back a temporary shared ChatGPT Site. Treat this as an explicit preview exception to the production only publishing path:
 
 1. Confirm the Convex team, project, isolated dev deployment, and exact expiration.
 2. Reuse a suitable isolated deployment or create one with `--type dev`, `--select`, and `--expiration`.

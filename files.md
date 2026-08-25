@@ -1,9 +1,9 @@
 # Files
 
-- `SKILL.md` — primary Codex Sites + Convex workflow and completion contract.
+- `SKILL.md` — primary ChatGPT Sites + Convex workflow and completion contract.
 - `README.md` — installation, default publication prompt, alternative workflows, and user-facing guidance.
 - `agents/openai.yaml` — skill-picker metadata and default prompt.
-- `assets/` — Codex and Convex footer artwork for light and dark themes.
+- `assets/` — Convex footer artwork for light and dark themes plus the reusable Node version check.
 - `assets/check-node-version.mjs` — reusable Node.js minimum-version guard copied into new projects.
 - `references/architecture.md` — runtime ownership and Sites lifecycle contract.
 - `references/accounts-access-and-ownership.md` — developer accounts, visitor access, shared-data warnings, and consent.
@@ -30,8 +30,3 @@
 - `tests/test-node-runtime.sh` — regression coverage for Node boundaries, failure before npm, and existing pnpm preservation.
 - `tests/test-node-version.mjs` — unit coverage for the reusable project-owned version check.
 - `tests/test-local-url.sh` — regression coverage for exact expected-port HTTP checks and fallback rejection.
-- `prds/2026-08-07-default-durable-publication.md` — implementation requirements for the durable-publication default.
-- `prds/2026-08-09-convex-helpers-eslint.md` — requirements for helper selection and Convex ESLint validation.
-- `prds/2026-08-09-runtime-localhost-hardening.md` — runtime-first and local-server reliability requirements.
-- `changelog.md` — release-facing change history.
-- `task.md` — completed maintenance tasks with UTC timestamps.
