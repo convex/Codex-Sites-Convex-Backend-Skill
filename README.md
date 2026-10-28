@@ -25,7 +25,7 @@ Without a dedicated workflow, an agent can scaffold a second frontend, introduce
 - Official [Convex agent setup](https://www.convex.dev/agent-setup.md) checks for plugin, MCP, and managed AI files
 - Official Convex component discovery before implementation
 - Component-specific skill loading when a component is selected
-- Optional [`convex-helpers`](https://github.com/get-convex/convex-helpers) discovery for matched code-level utilities
+- Optional [`convex-helpers`](https://github.com/convex/convex-helpers) discovery for matched code-level utilities
 - Official [Convex ESLint rules](https://docs.convex.dev/eslint) for backend quality checks
 - Convex schema, validator, index, authorization, and pagination rules
 - A deployed HTTPS and WebSocket connectivity gate
@@ -187,7 +187,7 @@ If the current task cannot access the project files or run commands, open the pr
 ### Option 1: Install for your Codex user
 
 ```bash
-git clone https://github.com/get-convex/Codex-Sites-Convex-Backend-Skill.git \
+git clone https://github.com/convex/Codex-Sites-Convex-Backend-Skill.git \
   ~/.codex/skills/codex-sites-convex
 ```
 
@@ -199,7 +199,7 @@ From the project root:
 
 ```bash
 mkdir -p .agents/skills
-git clone https://github.com/get-convex/Codex-Sites-Convex-Backend-Skill.git \
+git clone https://github.com/convex/Codex-Sites-Convex-Backend-Skill.git \
   .agents/skills/codex-sites-convex
 ```
 
@@ -644,7 +644,7 @@ Run component discovery manually:
 
 ## Backend utilities and Convex ESLint
 
-The skill treats [`convex-helpers`](https://github.com/get-convex/convex-helpers) as an optional utility library, not a default dependency or Convex Component. It checks helpers only when a named utility removes repeated code or a known correctness risk. Good candidates include custom function wrappers, relationships, validators, sessions, pagination, query helpers, and CORS.
+The skill treats [`convex-helpers`](https://github.com/convex/convex-helpers) as an optional utility library, not a default dependency or Convex Component. It checks helpers only when a named utility removes repeated code or a known correctness risk. Good candidates include custom function wrappers, relationships, validators, sessions, pagination, query helpers, and CORS.
 
 The selection order is:
 
@@ -817,7 +817,7 @@ codex plugin list --json
 Prefer the full Convex plugin because it includes skills and MCP:
 
 ```bash
-codex plugin marketplace add get-convex/convex-codex-plugin
+codex plugin marketplace add convex/convex-codex-plugin
 codex plugin add convex@convex-codex-plugin
 ```
 
@@ -904,7 +904,7 @@ The skill requires Codex to:
 
 ### Utilities and code quality
 
-- [`convex-helpers`](https://github.com/get-convex/convex-helpers)
+- [`convex-helpers`](https://github.com/convex/convex-helpers)
 - [`convex-helpers` package](https://www.npmjs.com/package/convex-helpers)
 - [Convex ESLint rules](https://docs.convex.dev/eslint)
 
@@ -980,4 +980,4 @@ When changing component discovery, also run:
 
 ## Repository
 
-[github.com/get-convex/Codex-Sites-Convex-Backend-Skill](https://github.com/get-convex/Codex-Sites-Convex-Backend-Skill)
+[github.com/convex/Codex-Sites-Convex-Backend-Skill](https://github.com/convex/Codex-Sites-Convex-Backend-Skill)

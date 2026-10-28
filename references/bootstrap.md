@@ -53,7 +53,7 @@ codex plugin list --json
 If the Convex marketplace is absent, add it. If present, upgrade it using its exact listed name. Then install or update the plugin:
 
 ```bash
-codex plugin marketplace add get-convex/convex-codex-plugin
+codex plugin marketplace add convex/convex-codex-plugin
 codex plugin add convex@convex-codex-plugin
 ```
 
