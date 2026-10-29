@@ -66,7 +66,7 @@ Run the existing lint command after changes. Treat Convex lint errors as impleme
 
 Sources:
 
-- https://github.com/get-convex/convex-helpers
+- https://github.com/convex/convex-helpers
 - https://www.npmjs.com/package/convex-helpers
 - https://docs.convex.dev/eslint
 - https://www.convex.dev/components/get-convex.md

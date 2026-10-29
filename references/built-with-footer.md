@@ -7,7 +7,7 @@ Add a small, accessible attribution footer to every Site created with this skill
 - Display `Built with`, a linked `ChatGPT Sites` label, a `+`, and the Convex logo.
 - Link ChatGPT Sites to `https://learn.chatgpt.com/docs/sites?surface=app`.
 - Link Convex to `https://www.convex.dev/`.
-- Include a repository link to `https://github.com/get-convex/Codex-Sites-Convex-Backend-Skill` with the Phosphor `GitHubLogoIcon` and the label `ChatGPT Sites + Convex Backend Skill`.
+- Include a repository link to `https://github.com/convex/Codex-Sites-Convex-Backend-Skill` with the Phosphor `GitHubLogoIcon` and the label `ChatGPT Sites + Convex Backend Skill`.
 - Open all external links in a new tab with `rel="noreferrer noopener"`.
 - Keep the footer visually quiet and consistent with the Site's design system.
 - Place it after the primary page content or in the shared root layout so it appears across routes.
@@ -80,7 +80,7 @@ function BuiltWithFooter({ isDarkTheme }: { isDarkTheme: boolean }) {
           <img src={convexLogo} alt="Convex" />
         </a>
         <a
-          href="https://github.com/get-convex/Codex-Sites-Convex-Backend-Skill"
+          href="https://github.com/convex/Codex-Sites-Convex-Backend-Skill"
           target="_blank"
           rel="noreferrer noopener"
           aria-label="Open the ChatGPT Sites and Convex Backend Skill on GitHub"

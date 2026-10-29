@@ -32,4 +32,4 @@ Sources:
 - https://docs.convex.dev/functions/validation
 - https://docs.convex.dev/database/indexes
 - https://docs.convex.dev/eslint
-- https://github.com/get-convex/convex-helpers
+- https://github.com/convex/convex-helpers
